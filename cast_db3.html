@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>キャスト管理DB</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f11;--bg2:#1a1a1f;--bg3:#222228;--border:#2e2e38;
+  --text:#f0f0f5;--text2:#9090a8;--text3:#5a5a72;
+  --accent:#a78bfa;--accent2:#7c5cf6;--success:#34d399;--danger:#f87171;
+  --radius:12px;--radius-sm:8px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;min-height:100vh}
+.app{max-width:420px;margin:0 auto;padding:0 0 80px}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:20px 16px 12px}
+.topbar-title{font-size:20px;font-weight:700;letter-spacing:-0.5px}
+.topbar-title span{color:var(--accent)}
+.icon-btn{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text2)}
+.add-btn-main{background:var(--accent2);border:none;border-radius:var(--radius-sm);padding:0 16px;height:36px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'Noto Sans JP',sans-serif}
+.sync-status{margin:0 16px 8px;font-size:11px;color:var(--text3);display:flex;align-items:center;gap:6px}
+.sync-dot{width:6px;height:6px;border-radius:50%}
+.key-banner{margin:0 16px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;font-size:12px;color:var(--text2)}
+.key-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.tab-bar{display:flex;margin:0 16px 16px;background:var(--bg2);border-radius:var(--radius-sm);padding:4px;gap:2px}
+.tab{flex:1;padding:8px 0;font-size:12px;font-weight:500;text-align:center;color:var(--text3);cursor:pointer;border:none;background:none;border-radius:6px;font-family:'Noto Sans JP',sans-serif}
+.tab.active{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
+.sec{display:none;padding:0 16px}.sec.active{display:block}
+.cast-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;cursor:pointer}
+.avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.stat2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.stat{background:var(--bg3);border-radius:var(--radius-sm);padding:10px 12px}
+.stat-l{font-size:11px;color:var(--text3);margin-bottom:4px}
+.stat-v{font-size:20px;font-weight:700}
+.empty{text-align:center;padding:60px 16px;color:var(--text3)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:flex-end;justify-content:center;z-index:100}
+.sheet{background:var(--bg2);border-radius:20px 20px 0 0;padding:20px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto}
+.sheet-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
+.sheet-title{font-size:16px;font-weight:700;margin-bottom:16px}
+.fl{font-size:12px;color:var(--text2);margin-bottom:6px;display:block}
+.fg{margin-bottom:14px}
+input,textarea{width:100%;font-size:14px;padding:10px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg3);color:var(--text);outline:none;font-family:'Noto Sans JP',sans-serif}
+input:focus,textarea:focus{border-color:var(--accent)}
+textarea{resize:none;line-height:1.6}
+.brow{display:flex;gap:8px;margin-top:16px}
+.btn{flex:1;padding:12px;border-radius:var(--radius-sm);font-size:14px;cursor:pointer;font-weight:700;font-family:'Noto Sans JP',sans-serif}
+.btn-p{background:var(--accent2);color:#fff;border:none}
+.btn-c{background:none;border:1px solid var(--border);color:var(--text2)}
+.detail-view{position:fixed;inset:0;background:var(--bg);overflow-y:auto;z-index:50;max-width:420px;margin:0 auto}
+.detail-inner{padding:16px 16px 80px}
+.back-btn{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--text2);background:none;border:none;cursor:pointer;padding:0;margin-bottom:20px;font-family:'Noto Sans JP',sans-serif}
+.sec-label{font-size:11px;color:var(--text3);font-weight:700;margin:20px 0 8px;letter-spacing:1px;text-transform:uppercase}
+.info-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;color:var(--text2);line-height:1.7}
+.trend-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12px}
+.trend-label{min-width:48px;color:var(--text2)}
+.trend-bar-bg{flex:1;background:var(--bg3);border-radius:99px;height:6px;overflow:hidden}
+.trend-bar{height:6px;border-radius:99px}
+.trend-val{min-width:36px;text-align:right;font-weight:700}
+.add-mini-btn{width:100%;padding:10px;font-size:13px;border:1px dashed var(--border);border-radius:var(--radius-sm);background:none;color:var(--text3);cursor:pointer;margin-top:8px;font-family:'Noto Sans JP',sans-serif}
+.chat-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-top:8px}
+.chat-msgs{min-height:60px;max-height:300px;overflow-y:auto;margin-bottom:12px;display:flex;flex-direction:column;gap:8px}
+.msg{font-size:13px;line-height:1.7;padding:10px 12px;border-radius:var(--radius-sm);max-width:95%}
+.msg-user{background:var(--accent2);color:#fff;align-self:flex-end}
+.msg-ai{background:var(--bg3);border:1px solid var(--border);align-self:flex-start;color:var(--text)}
+.msg-thinking{color:var(--text3);font-size:12px;align-self:flex-start;padding:6px 0}
+.chat-input-row{display:flex;gap:8px;align-items:flex-end}
+.chat-input-row textarea{font-size:13px;padding:8px 12px;min-height:38px;max-height:80px}
+.chat-send{flex-shrink:0;width:38px;height:38px;border-radius:var(--radius-sm);background:var(--accent2);color:#fff;border:none;cursor:pointer;font-size:18px}
+.hist-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px}
+.hist-date{font-size:11px;color:var(--text3);margin-bottom:6px}
+.hist-content{font-size:13px;color:var(--text2);line-height:1.7}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="topbar-title">Cast<span>DB</span></div>
+    <div style="display:flex;gap:8px">
+      <button class="icon-btn" onclick="openKeyModal()" title="APIキー設定">🔑</button>
+      <button class="add-btn-main" onclick="openAdd()">＋ 追加</button>
+    </div>
+  </div>
+  <div id="syncStatus" class="sync-status"><div class="sync-dot" style="background:var(--text3)"></div><span>接続中...</span></div>
+  <div id="keyBanner"></div>
+  <div class="tab-bar">
+    <button class="tab active" onclick="switchTab('list',this)">一覧</button>
+    <button class="tab" onclick="switchTab('ranking',this)">売上</button>
+    <button class="tab" onclick="switchTab('consult',this)">相談</button>
+  </div>
+  <div id="list" class="sec active"></div>
+  <div id="ranking" class="sec"></div>
+  <div id="consult" class="sec"></div>
+</div>
+
+<!-- APIキー -->
+<div id="keyModal" style="display:none">
+  <div class="overlay" onclick="if(event.target===this)closeKeyModal()">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <p class="sheet-title">🔑 Anthropic APIキー設定</p>
+      <div class="fg">
+        <label class="fl">APIキー</label>
+        <input id="keyInput" type="text" placeholder="sk-ant-..." autocomplete="off"/>
+        <div style="font-size:11px;color:var(--text3);margin-top:8px;line-height:1.7">このデバイスにのみ保存されます。<br>取得：<a href="https://console.anthropic.com" target="_blank" style="color:var(--accent)">console.anthropic.com</a></div>
+      </div>
+      <div class="brow">
+        <button class="btn btn-c" onclick="clearKey()">削除</button>
+        <button class="btn btn-p" onclick="saveKey()">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- キャスト追加/編集 -->
+<div id="addModal" style="display:none">
+  <div class="overlay" onclick="if(event.target===this)closeAdd()">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <p id="addTitle" class="sheet-title">キャスト追加</p>
+      <div class="fg"><label class="fl">源氏名</label><input id="f-name" placeholder="例：さくら"/></div>
+      <div class="fg"><label class="fl">年齢</label><input id="f-age" type="number" placeholder="20" min="18"/></div>
+      <div class="fg"><label class="fl">在籍期間</label><input id="f-tenure" placeholder="例：3ヶ月"/></div>
+      <div class="fg"><label class="fl">強み・特徴</label><textarea id="f-strength" rows="2" placeholder="明るい、常連が多いなど"></textarea></div>
+      <div class="fg"><label class="fl">課題・弱み</label><textarea id="f-weakness" rows="2" placeholder="遅刻が多め、ドリンクバック率低いなど"></textarea></div>
+      <div class="fg"><label class="fl">メモ</label><textarea id="f-memo" rows="2" placeholder="直近の面談内容など"></textarea></div>
+      <div class="brow">
+        <button class="btn btn-c" onclick="closeAdd()">キャンセル</button>
+        <button id="saveBtn" class="btn btn-p" onclick="saveNew()">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 月次データ -->
+<div id="monthModal" style="display:none">
+  <div class="overlay" onclick="if(event.target===this)closeMonthModal()">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <p class="sheet-title">月次データを追加</p>
+      <div class="fg"><label class="fl">年月</label><input id="m-ym" type="month"/></div>
+      <div class="fg"><label class="fl">売上（万円）</label><input id="m-sales" type="number" placeholder="0" step="0.1"/></div>
+      <div class="fg"><label class="fl">指名数</label><input id="m-shimei" type="number" placeholder="0"/></div>
+      <div class="fg"><label class="fl">メモ</label><textarea id="m-memo" rows="2" placeholder="今月の特記事項など"></textarea></div>
+      <div class="brow">
+        <button class="btn btn-c" onclick="closeMonthModal()">キャンセル</button>
+        <button class="btn btn-p" onclick="saveMonth()">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 面談メモ -->
+<div id="memoModal" style="display:none">
+  <div class="overlay" onclick="if(event.target===this)closeMemoModal()">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <p class="sheet-title">メモを追加</p>
+      <div class="fg"><label class="fl">日付</label><input id="memo-date" type="date"/></div>
+      <div class="fg"><label class="fl">内容</label><textarea id="memo-content" rows="4" placeholder="○○さん最近アニメにハマってる、など何でもOK"></textarea></div>
+      <div class="brow">
+        <button class="btn btn-c" onclick="closeMemoModal()">キャンセル</button>
+        <button class="btn btn-p" onclick="saveMemo()">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 詳細 -->
+<div id="detailView" style="display:none">
+  <div class="detail-view">
+    <div class="detail-inner">
+      <button class="back-btn" onclick="closeDetail()">← 一覧に戻る</button>
+      <div id="detailContent"></div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import { getFirestore, collection, doc, onSnapshot, setDoc, updateDoc, addDoc, arrayUnion, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAeSQpMbMASXGdNtKAkBFIAriuXEpilXzA",
+  authDomain: "cast-management-47c1f.firebaseapp.com",
+  projectId: "cast-management-47c1f",
+  storageBucket: "cast-management-47c1f.firebasestorage.app",
+  messagingSenderId: "1094441321205",
+  appId: "1:1094441321205:web:b5daf7f9101042f1173bbc"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const COLS=[
+  {bg:'#3d2b6e',t:'#c4b5fd'},{bg:'#1a3a2e',t:'#6ee7b7'},
+  {bg:'#3a1f1a',t:'#fca5a5'},{bg:'#2d1f3a',t:'#f0abfc'},
+  {bg:'#1a2a3a',t:'#93c5fd'},{bg:'#1a3020',t:'#86efac'},
+  {bg:'#3a2e1a',t:'#fde68a'},{bg:'#3a1f2a',t:'#f9a8d4'}
+];
+
+let casts = [];
+let castsMap = {};
+let editTarget = null, monthTarget = null, memoTarget = null;
+let chatHistories = {};
+let currentDetailId = null;
+
+function col(i){ return COLS[i % COLS.length]; }
+function ini(n){ return n ? n.slice(0,2) : '?'; }
+function today(){ return new Date().toISOString().slice(0,10); }
+function thisMonth(){ return new Date().toISOString().slice(0,7); }
+
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+function lsDel(k){ try{ localStorage.removeItem(k); }catch(e){} }
+
+function getKey(){ return lsGet('cast_apikey') || ''; }
+function saveKey(){
+  const v = document.getElementById('keyInput').value.trim();
+  if(!v){ alert('APIキーを入力してください'); return; }
+  lsSet('cast_apikey', v); closeKeyModal(); renderKeyBanner();
+}
+function clearKey(){ lsDel('cast_apikey'); document.getElementById('keyInput').value=''; closeKeyModal(); renderKeyBanner(); }
+function openKeyModal(){ document.getElementById('keyInput').value = getKey(); document.getElementById('keyModal').style.display='block'; }
+function closeKeyModal(){ document.getElementById('keyModal').style.display='none'; }
+function renderKeyBanner(){
+  const key = getKey();
+  const el = document.getElementById('keyBanner');
+  if(key){
+    el.innerHTML=`<div class="key-banner" onclick="openKeyModal()"><div class="key-dot" style="background:#34d399"></div><span>AIチャット有効 · ...${key.slice(-4)}</span><span style="margin-left:auto;font-size:11px">変更</span></div>`;
+  }else{
+    el.innerHTML=`<div class="key-banner" onclick="openKeyModal()"><div class="key-dot" style="background:#f87171"></div><span>APIキー未設定 — タップして設定</span><span style="margin-left:auto">›</span></div>`;
+  }
+}
+
+function setSyncStatus(status){
+  const el = document.getElementById('syncStatus');
+  if(status === 'ok') el.innerHTML=`<div class="sync-dot" style="background:#34d399"></div><span>同期済み</span>`;
+  else if(status === 'saving') el.innerHTML=`<div class="sync-dot" style="background:#fde68a"></div><span>保存中...</span>`;
+  else el.innerHTML=`<div class="sync-dot" style="background:#f87171"></div><span>オフライン</span>`;
+}
+
+// Firestoreリアルタイム監視
+const castsRef = collection(db, 'casts');
+onSnapshot(query(castsRef, orderBy('createdAt', 'asc')), (snapshot) => {
+  casts = [];
+  castsMap = {};
+  snapshot.forEach(docSnap => {
+    const data = { id: docSnap.id, ...docSnap.data() };
+    casts.push(data);
+    castsMap[docSnap.id] = data;
+  });
+  render();
+  setSyncStatus('ok');
+  if(currentDetailId && castsMap[currentDetailId]){
+    const idx = casts.findIndex(c => c.id === currentDetailId);
+    if(idx >= 0) renderDetailContent(idx);
+  }
+}, (err) => {
+  setSyncStatus('error');
+  console.error(err);
+});
+
+function switchTab(tab, el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.getElementById(tab).classList.add('active');
+  render();
+}
+window.switchTab = switchTab;
+
+function render(){ renderList(); renderRanking(); renderConsult(); }
+
+function renderList(){
+  const el = document.getElementById('list');
+  if(!casts.length){
+    el.innerHTML='<div class="empty"><div style="font-size:40px;margin-bottom:12px">👥</div><p style="font-size:14px;line-height:1.8">キャストがまだいません<br>右上の「追加」から登録してください</p></div>';
+    return;
+  }
+  el.innerHTML = casts.map((c,i) => {
+    const cl = col(i);
+    const months = (c.monthly||[]).slice().sort((a,b)=>b.ym.localeCompare(a.ym));
+    const latest = months[0], prev = months[1];
+    const diff = latest&&prev ? +(latest.sales-prev.sales).toFixed(1) : null;
+    return `<div class="cast-card" onclick="openDetail(${i})">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="avatar" style="width:44px;height:44px;font-size:15px;background:${cl.bg};color:${cl.t}">${ini(c.name)}</div>
+        <div style="flex:1"><div style="font-size:15px;font-weight:700">${c.name}</div><div style="font-size:12px;color:var(--text2);margin-top:2px">${c.age?c.age+'歳':''}${c.tenure?' · '+c.tenure:''}</div></div>
+        <span style="color:var(--text3);font-size:18px">›</span>
+      </div>
+      <div class="stat2">
+        <div class="stat"><div class="stat-l">最新売上</div><div class="stat-v" style="color:${cl.t}">${latest?latest.sales+'万':'―'}</div></div>
+        <div class="stat"><div class="stat-l">前月比</div><div class="stat-v" style="color:${diff===null?'var(--text)':diff>=0?'var(--success)':'var(--danger)'}">${diff===null?'―':(diff>=0?'+':'')+diff+'万'}</div></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderRanking(){
+  const el = document.getElementById('ranking');
+  if(!casts.length){ el.innerHTML='<div class="empty">データがありません</div>'; return; }
+  const data = casts.map((c,i)=>{
+    const m=(c.monthly||[]).slice().sort((a,b)=>b.ym.localeCompare(a.ym));
+    return{...c,_i:i,latest:m[0]||null,prev:m[1]||null};
+  }).sort((a,b)=>((b.latest?.sales)||0)-((a.latest?.sales)||0));
+  const max = data[0]?.latest?.sales||1;
+  const medals=['🥇','🥈','🥉'];
+  el.innerHTML = data.map((c,rank)=>{
+    const cl=col(c._i); const pct=Math.round(((c.latest?.sales||0)/max)*100);
+    const diff=c.latest&&c.prev?+(c.latest.sales-c.prev.sales).toFixed(1):null;
+    return `<div class="cast-card" onclick="openDetail(${c._i})">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:18px;min-width:28px">${medals[rank]||rank+1}</span>
+        <div class="avatar" style="width:36px;height:36px;font-size:13px;background:${cl.bg};color:${cl.t}">${ini(c.name)}</div>
+        <div style="flex:1"><div style="font-size:14px;font-weight:700">${c.name}</div>
+          <div style="background:var(--bg3);border-radius:99px;height:5px;margin-top:6px;overflow:hidden"><div style="background:${cl.t};height:5px;width:${pct}%;border-radius:99px"></div></div>
+        </div>
+        <div style="text-align:right"><div style="font-size:16px;font-weight:700;color:${cl.t}">${c.latest?c.latest.sales+'万':'―'}</div>${diff!==null?`<div style="font-size:11px;color:${diff>=0?'var(--success)':'var(--danger)'}">${diff>=0?'+':''}${diff}万</div>`:''}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderConsult(){
+  const el = document.getElementById('consult');
+  const all = [];
+  casts.forEach((c,i)=>(c.memos||[]).forEach(m=>all.push({...m,castName:c.name,castIdx:i})));
+  all.sort((a,b)=>b.date.localeCompare(a.date));
+  if(!all.length){ el.innerHTML='<div class="empty"><div style="font-size:40px;margin-bottom:12px">💬</div><p style="font-size:14px">面談メモがまだありません</p></div>'; return; }
+  el.innerHTML = all.map(m=>{
+    const cl=col(m.castIdx);
+    return `<div class="cast-card" onclick="openDetail(${m.castIdx})">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <div class="avatar" style="width:30px;height:30px;font-size:12px;background:${cl.bg};color:${cl.t}">${ini(m.castName)}</div>
+        <span style="font-size:13px;font-weight:700">${m.castName}</span>
+        <span style="font-size:11px;color:var(--text3);margin-left:auto">${m.date}</span>
+      </div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.7">${m.content}</div>
+    </div>`;
+  }).join('');
+}
+
+function openDetail(i){
+  currentDetailId = casts[i].id;
+  renderDetailContent(i);
+  document.getElementById('detailView').style.display='block';
+}
+window.openDetail = openDetail;
+
+function renderDetailContent(i){
+  const c = casts[i]; const cl = col(i);
+  const months = (c.monthly||[]).slice().sort((a,b)=>b.ym.localeCompare(a.ym));
+  const maxS = Math.max(...months.map(m=>m.sales||0),1);
+  const memos = (c.memos||[]).slice().reverse();
+  const chatKey = 'cast_'+c.id;
+  if(!chatHistories[chatKey]) chatHistories[chatKey]=[];
+  const hasKey = !!getKey();
+
+  const trendHTML = months.length
+    ? months.slice(0,6).map(m=>{
+        const pct=Math.round((m.sales/maxS)*100);
+        return `<div class="trend-row">
+          <span class="trend-label">${m.ym.slice(5)}月</span>
+          <div class="trend-bar-bg"><div class="trend-bar" style="width:${pct}%;background:${cl.t}"></div></div>
+          <span class="trend-val" style="color:${cl.t}">${m.sales}万</span>
+          ${m.shimei?`<span style="font-size:11px;color:var(--text3);min-width:32px">${m.shimei}本</span>`:''}
+        </div>`;
+      }).join('')
+    : '<div style="font-size:13px;color:var(--text3)">月次データなし</div>';
+
+  document.getElementById('detailContent').innerHTML=`
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px">
+      <div class="avatar" style="width:56px;height:56px;font-size:22px;background:${cl.bg};color:${cl.t}">${ini(c.name)}</div>
+      <div style="flex:1"><div style="font-size:22px;font-weight:700">${c.name}</div><div style="font-size:13px;color:var(--text2);margin-top:2px">${c.age?c.age+'歳':''}${c.tenure?' · '+c.tenure:''}</div></div>
+      <button onclick="openEdit(${i})" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-size:12px;cursor:pointer;color:var(--text2);font-family:'Noto Sans JP',sans-serif">編集</button>
+    </div>
+    <div class="sec-label">売上推移</div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px">${trendHTML}</div>
+    <button class="add-mini-btn" onclick="openMonthModal(${i})">＋ 月次データを追加</button>
+    ${c.strength?`<div class="sec-label">強み・特徴</div><div class="info-box">${c.strength}</div>`:''}
+    ${c.weakness?`<div class="sec-label">課題・弱み</div><div class="info-box">${c.weakness}</div>`:''}
+    ${c.memo?`<div class="sec-label">メモ</div><div class="info-box">${c.memo}</div>`:''}
+    <div class="sec-label">AIに相談</div>
+    ${hasKey?`
+    <div class="chat-wrap">
+      <div class="chat-msgs" id="chatMsgs_${i}">${renderChatHist(chatHistories[chatKey])}</div>
+      <div class="chat-input-row">
+        <textarea id="chatInput_${i}" rows="1" placeholder="例：売上推移どう思う？"></textarea>
+        <button class="chat-send" onclick="sendChat(${i})">↑</button>
+      </div>
+    </div>`:`<div style="font-size:13px;color:var(--text3);padding:8px 0">APIキーが未設定です。<span style="color:var(--accent);cursor:pointer" onclick="openKeyModal()">タップして設定</span></div>`}
+    <div class="sec-label">面談・メモ記録</div>
+    ${memos.length?memos.map(m=>`<div class="hist-item"><div class="hist-date">${m.date}</div><div class="hist-content">${m.content}</div></div>`).join(''):'<div style="font-size:13px;color:var(--text3)">記録なし</div>'}
+    <button class="add-mini-btn" onclick="openMemoModal(${i})">＋ メモを追加</button>
+  `;
+  const cm = document.getElementById('chatMsgs_'+i);
+  if(cm) cm.scrollTop = cm.scrollHeight;
+}
+
+function renderChatHist(hist){
+  return hist.map(m=>`<div class="msg ${m.role==='user'?'msg-user':'msg-ai'}">${m.content.replace(/\n/g,'<br>')}</div>`).join('');
+}
+
+async function sendChat(i){
+  const c = casts[i];
+  const inputEl = document.getElementById('chatInput_'+i);
+  const text = inputEl.value.trim(); if(!text) return;
+  inputEl.value='';
+  const chatKey='cast_'+c.id;
+  chatHistories[chatKey].push({role:'user',content:text});
+  const msgsEl = document.getElementById('chatMsgs_'+i);
+  msgsEl.innerHTML = renderChatHist(chatHistories[chatKey])+'<div class="msg-thinking">考え中...</div>';
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+
+  const months=(c.monthly||[]).slice().sort((a,b)=>a.ym.localeCompare(b.ym));
+  const monthsText=months.length?months.map(m=>`${m.ym}：売上${m.sales}万円 指名${m.shimei||'不明'}本${m.memo?' ('+m.memo+')':''}`).join('\n'):'月次データなし';
+  const memosText=(c.memos||[]).length?(c.memos||[]).map(m=>`${m.date}：${m.content}`).join('\n'):'なし';
+
+  const sys=`あなたはナイトワーク店舗のマネジメントアドバイザーです。以下のキャスト情報をもとに、オーナーの質問に的確で実践的なアドバイスを日本語で返してください。簡潔に、箇条書きも活用してください。
+
+【キャスト名】${c.name}
+【年齢】${c.age||'不明'}歳
+【在籍期間】${c.tenure||'不明'}
+【強み・特徴】${c.strength||'なし'}
+【課題・弱み】${c.weakness||'なし'}
+【月次売上推移（古い順）】
+${monthsText}
+【面談・メモ記録】
+${memosText}`;
+
+  try{
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':getKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1000,system:sys,messages:chatHistories[chatKey]})
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text||(data.error?.message||'エラーが発生しました');
+    chatHistories[chatKey].push({role:'assistant',content:reply});
+  }catch(e){
+    chatHistories[chatKey].push({role:'assistant',content:'通信エラー。APIキーと接続を確認してください。'});
+  }
+  msgsEl.innerHTML = renderChatHist(chatHistories[chatKey]);
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+}
+window.sendChat = sendChat;
+
+function closeDetail(){ document.getElementById('detailView').style.display='none'; currentDetailId=null; }
+window.closeDetail = closeDetail;
+
+function openAdd(){
+  editTarget=null;
+  document.getElementById('addTitle').textContent='キャスト追加';
+  document.getElementById('saveBtn').textContent='保存';
+  document.getElementById('saveBtn').onclick=saveNew;
+  ['f-name','f-age','f-tenure','f-strength','f-weakness','f-memo'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('addModal').style.display='block';
+}
+window.openAdd = openAdd;
+function closeAdd(){ document.getElementById('addModal').style.display='none'; }
+window.closeAdd = closeAdd;
+
+async function saveNew(){
+  const name = document.getElementById('f-name').value.trim();
+  if(!name){ alert('源氏名を入力してください'); return; }
+  setSyncStatus('saving');
+  await addDoc(castsRef,{
+    name, age:document.getElementById('f-age').value,
+    tenure:document.getElementById('f-tenure').value,
+    strength:document.getElementById('f-strength').value,
+    weakness:document.getElementById('f-weakness').value,
+    memo:document.getElementById('f-memo').value,
+    monthly:[], memos:[], createdAt:serverTimestamp()
+  });
+  closeAdd();
+}
+window.saveNew = saveNew;
+
+function openEdit(i){
+  editTarget=i; const c=casts[i];
+  document.getElementById('f-name').value=c.name||'';
+  document.getElementById('f-age').value=c.age||'';
+  document.getElementById('f-tenure').value=c.tenure||'';
+  document.getElementById('f-strength').value=c.strength||'';
+  document.getElementById('f-weakness').value=c.weakness||'';
+  document.getElementById('f-memo').value=c.memo||'';
+  document.getElementById('addTitle').textContent='キャスト情報を編集';
+  document.getElementById('saveBtn').textContent='更新';
+  document.getElementById('saveBtn').onclick=saveEdit;
+  document.getElementById('addModal').style.display='block';
+}
+window.openEdit = openEdit;
+
+async function saveEdit(){
+  const name = document.getElementById('f-name').value.trim();
+  if(!name){ alert('源氏名を入力してください'); return; }
+  setSyncStatus('saving');
+  const c = casts[editTarget];
+  await updateDoc(doc(db,'casts',c.id),{
+    name, age:document.getElementById('f-age').value,
+    tenure:document.getElementById('f-tenure').value,
+    strength:document.getElementById('f-strength').value,
+    weakness:document.getElementById('f-weakness').value,
+    memo:document.getElementById('f-memo').value
+  });
+  closeAdd();
+}
+window.saveEdit = saveEdit;
+
+function openMonthModal(i){ monthTarget=i; document.getElementById('m-ym').value=thisMonth(); document.getElementById('m-sales').value=''; document.getElementById('m-shimei').value=''; document.getElementById('m-memo').value=''; document.getElementById('monthModal').style.display='block'; }
+window.openMonthModal = openMonthModal;
+function closeMonthModal(){ document.getElementById('monthModal').style.display='none'; }
+window.closeMonthModal = closeMonthModal;
+
+async function saveMonth(){
+  const ym = document.getElementById('m-ym').value;
+  if(!ym){ alert('年月を入力してください'); return; }
+  const sales = parseFloat(document.getElementById('m-sales').value)||0;
+  const c = casts[monthTarget];
+  const monthly = [...(c.monthly||[])];
+  const idx = monthly.findIndex(m=>m.ym===ym);
+  const entry = {ym,sales,shimei:document.getElementById('m-shimei').value,memo:document.getElementById('m-memo').value};
+  if(idx>=0) monthly[idx]=entry; else monthly.push(entry);
+  setSyncStatus('saving');
+  await updateDoc(doc(db,'casts',c.id),{monthly});
+  closeMonthModal();
+}
+window.saveMonth = saveMonth;
+
+function openMemoModal(i){ memoTarget=i; document.getElementById('memo-date').value=today(); document.getElementById('memo-content').value=''; document.getElementById('memoModal').style.display='block'; }
+window.openMemoModal = openMemoModal;
+function closeMemoModal(){ document.getElementById('memoModal').style.display='none'; }
+window.closeMemoModal = closeMemoModal;
+
+async function saveMemo(){
+  const content = document.getElementById('memo-content').value.trim();
+  if(!content){ alert('内容を入力してください'); return; }
+  const c = casts[memoTarget];
+  const newMemo = {date:document.getElementById('memo-date').value, content};
+  setSyncStatus('saving');
+  await updateDoc(doc(db,'casts',c.id),{memos: arrayUnion(newMemo)});
+  closeMemoModal();
+}
+window.saveMemo = saveMemo;
+
+window.openKeyModal = openKeyModal;
+window.closeKeyModal = closeKeyModal;
+window.saveKey = saveKey;
+window.clearKey = clearKey;
+
+renderKeyBanner();
+</script>
+</body>
+</html>
