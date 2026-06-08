@@ -243,12 +243,46 @@ function today(){
 function thisMonth(){ return new Date().toISOString().slice(0,7); }
 function daysSince(dateStr){
   if(!dateStr) return 999;
-  const diff = new Date() - new Date(dateStr);
+  // 朝5時を日付変更とする
+  const now=new Date();
+  const adjustedNow=new Date(now.getTime() - 5*60*60*1000);
+  const target=new Date(dateStr+'T05:00:00');
+  const diff=adjustedNow-target;
   return Math.floor(diff/86400000);
 }
 function lastMemoDate(c){
   if(!c.memos||!c.memos.length) return null;
   return c.memos.slice().sort((a,b)=>b.date.localeCompare(a.date))[0].date;
+}
+function lastAttendDate(id){
+  // 過去30日分チェック
+  for(let i=0;i<=30;i++){
+    const d=new Date();
+    d.setDate(d.getDate()-i);
+    const dateStr=d.toISOString().slice(0,10);
+    const saved=lsGet('attend_'+dateStr);
+    if(!saved) continue;
+    const att=JSON.parse(saved);
+    if(att[id]?.working) return dateStr;
+  }
+  return null;
+}
+function attendLabel(id){
+  const date=lastAttendDate(id);
+  if(!date) return null;
+  const days=daysSince(date);
+  if(days===0) return '今日出勤';
+  if(days<=6) return `${days}日前出勤`;
+  return '7日以上前出勤';
+}
+function attendLabelColor(id){
+  const date=lastAttendDate(id);
+  if(!date) return 'var(--text3)';
+  const days=daysSince(date);
+  if(days===0) return 'var(--success)';
+  if(days<=3) return 'var(--accent)';
+  if(days<=6) return 'var(--warn)';
+  return 'var(--text3)';
 }
 
 function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
@@ -307,6 +341,7 @@ function getRecentAttendanceStatus(castId){
   }
   return {days, lastWorked:lastWorked?.date||null, streak};
 }
+function getYesterday(){
   const d=new Date(); d.setDate(d.getDate()-1);
   return d.toISOString().slice(0,10);
 }
@@ -425,8 +460,9 @@ function renderList(){
       <div style="display:flex;align-items:center;gap:12px">
         <div class="avatar" style="width:44px;height:44px;font-size:15px;background:${cl.bg};color:${cl.t}">${ini(c.name)}</div>
         <div style="flex:1">
-          <div style="font-size:15px;font-weight:700">${c.name}${isAlert?`<span class="alert-badge">7日以上未連絡</span>`:isWarn?`<span class="warn-badge">${c.days}日未更新</span>`:''}</div>
+          <div style="font-size:15px;font-weight:700">${c.name}${isAlert?`<span class="alert-badge">7日以上情報更新なし</span>`:isWarn?`<span class="warn-badge">${c.days}日未更新</span>`:''}</div>
           <div style="font-size:12px;color:var(--text2);margin-top:2px">${c.age?c.age+'歳':''}${c.tenure?' · 入店'+c.tenure:''}</div>
+          ${attendLabel(c.id)?`<div style="font-size:11px;color:${attendLabelColor(c.id)};margin-top:3px">🏃 ${attendLabel(c.id)}</div>`:''}
         </div>
         <span style="color:var(--text3);font-size:18px">›</span>
       </div>
@@ -457,7 +493,7 @@ function renderToday(){
   // 要注意キャストバナー
   if(alertCasts.length){
     html+=`<div style="background:rgba(248,113,113,0.1);border:1px solid var(--danger);border-radius:var(--radius);padding:12px 14px;margin-bottom:14px">
-      <div style="font-size:12px;font-weight:700;color:var(--danger);margin-bottom:8px">⚠️ 7日以上メモ未更新</div>
+      <div style="font-size:12px;font-weight:700;color:var(--danger);margin-bottom:8px">⚠️ 7日以上情報更新なし</div>
       ${alertCasts.map(c=>`<div style="font-size:13px;color:var(--text2);padding:3px 0">${c.name} <span style="color:var(--text3);font-size:11px">（${daysSince(lastMemoDate(c))}日前）</span></div>`).join('')}
     </div>`;
   }
@@ -694,9 +730,10 @@ ${memosText}`;
       body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1000,system:sys,messages:chatHistories[chatKey],tools:[{type:'web_search_20250305',name:'web_search'}]})
     });
     const data=await res.json();
-    const reply=data.content?.filter(b=>b.type==='text').map(b=>b.text).join('\n')||(data.error?.message||'エラーが発生しました');
+    const blocks=data.content||[];
+    const reply=blocks.filter(b=>b.type==='text').map(b=>b.text).join('\n')||(data.error?.message||'エラーが発生しました');
     chatHistories[chatKey].push({role:'assistant',content:reply});
-    await updateDoc(doc(db,'casts',c.id),{chatHistory:chatHistories[chatKey]});
+    try{ await updateDoc(doc(db,'casts',c.id),{chatHistory:chatHistories[chatKey]}); }catch(e){ console.error('履歴保存失敗',e); }
   }catch(e){
     chatHistories[chatKey].push({role:'assistant',content:'通信エラー。APIキーと接続を確認してください。'});
   }
