@@ -546,11 +546,11 @@ function renderRanking(){
   const data=casts.map((c,i)=>{
     const m=(c.monthly||[]).slice().sort((a,b)=>b.ym.localeCompare(a.ym));
     return{...c,_i:i,latest:m[0]||null,prev:m[1]||null};
-  }).sort((a,b)=>((b.(latest&&latest.sales))||0)-((a.(latest&&latest.sales))||0));
+  }).sort((a,b)=>((b.latest&&b.latest.sales)||0)-((a.latest&&a.latest.sales)||0));
   const max=data[0]?(data[0].latest&&data[0].latest.sales)||1:1;
   const medals=['🥇','🥈','🥉'];
   el.innerHTML=data.map((c,rank)=>{
-    const cl=col(c._i); const pct=Math.round(((c.(latest&&latest.sales)||0)/max)*100);
+    const cl=col(c._i); const pct=Math.round(((c.latest&&c.latest.sales||0)/max)*100);
     const diff=c.latest&&c.prev?+(c.latest.sales-c.prev.sales).toFixed(1):null;
     const photoRate=c.latest&&c.latest.shifts?Math.round((c.latest.photos||0)/c.latest.shifts*100):null;
     return `<div class="cast-card" onclick="openDetail(${c._i})">
@@ -731,7 +731,7 @@ ${memosText}`;
     });
     const data=await res.json();
     const blocks=data.content||[];
-    const reply=blocks.filter(b=>b.type==='text').map(b=>b.text).join('\n')||(data.(error&&error.message)||'エラーが発生しました');
+    const reply=blocks.filter(b=>b.type==='text').map(b=>b.text).join('\n')||((data.error&&data.error.message)||'エラーが発生しました');
     chatHistories[chatKey].push({role:'assistant',content:reply});
     try{ await updateDoc(doc(db,'casts',c.id),{chatHistory:chatHistories[chatKey]}); }catch(e){ console.error('履歴保存失敗',e); }
   }catch(e){
