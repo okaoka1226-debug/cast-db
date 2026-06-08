@@ -327,6 +327,7 @@ function photoColor(id){
   if(days<=6) return 'var(--warn)';
   return 'var(--text3)';
 }
+function attendLabel(id){
   var date=lastAttendDate(id);
   if(!date) return null;
   var days=daysSince(date);
