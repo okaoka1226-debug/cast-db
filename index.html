@@ -18,24 +18,26 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-seri
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:20px 16px 12px}
 .topbar-title{font-size:20px;font-weight:700;letter-spacing:-0.5px}
 .topbar-title span{color:var(--accent)}
-.icon-btn{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text2)}
-.add-btn-main{background:var(--accent2);border:none;border-radius:var(--radius-sm);padding:0 16px;height:36px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'Noto Sans JP',sans-serif}
-.sync-status{margin:0 16px 8px;font-size:11px;color:var(--text3);display:flex;align-items:center;gap:6px}
-.sync-dot{width:6px;height:6px;border-radius:50%}
-.key-banner{margin:0 16px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;font-size:12px;color:var(--text2)}
-.key-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.add-btn-main{background:var(--accent2);border:none;border-radius:var(--radius-sm);padding:0 16px;height:36px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans JP',sans-serif}
+.search-wrap{padding:0 16px 12px}
+.search-input{width:100%;font-size:14px;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg2);color:var(--text);outline:none;font-family:'Noto Sans JP',sans-serif}
+.sync-bar{margin:0 16px 8px;font-size:11px;color:var(--text3);display:flex;align-items:center;gap:6px}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--text3)}
 .tab-bar{display:flex;margin:0 16px 16px;background:var(--bg2);border-radius:var(--radius-sm);padding:4px;gap:2px}
 .tab{flex:1;padding:8px 0;font-size:11px;font-weight:500;text-align:center;color:var(--text3);cursor:pointer;border:none;background:none;border-radius:6px;font-family:'Noto Sans JP',sans-serif}
 .tab.active{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
 .sec{display:none;padding:0 16px}.sec.active{display:block}
-.cast-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;cursor:pointer}
-.cast-card.alert{border-color:var(--danger)}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;cursor:pointer}
+.card.alert-border{border-color:var(--danger)}
+.card.working-border{border-color:var(--success)}
 .avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
 .stat2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
-.stat3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
 .stat{background:var(--bg3);border-radius:var(--radius-sm);padding:10px 12px}
 .stat-l{font-size:11px;color:var(--text3);margin-bottom:4px}
 .stat-v{font-size:18px;font-weight:700}
+.badge{font-size:10px;padding:2px 7px;border-radius:99px;display:inline-block;margin-left:4px}
+.badge-danger{background:rgba(248,113,113,0.2);color:var(--danger);border:1px solid var(--danger)}
+.badge-warn{background:rgba(251,191,36,0.2);color:var(--warn);border:1px solid var(--warn)}
 .empty{text-align:center;padding:60px 16px;color:var(--text3)}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:flex-end;justify-content:center;z-index:100}
 .sheet{background:var(--bg2);border-radius:20px 20px 0 0;padding:20px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto}
@@ -74,15 +76,10 @@ textarea{resize:none;line-height:1.6}
 .hist-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px}
 .hist-date{font-size:11px;color:var(--text3);margin-bottom:6px}
 .hist-content{font-size:13px;color:var(--text2);line-height:1.7}
-.alert-badge{font-size:10px;background:rgba(248,113,113,0.2);color:var(--danger);border:1px solid var(--danger);border-radius:99px;padding:2px 7px;margin-left:6px}
-.warn-badge{font-size:10px;background:rgba(251,191,36,0.2);color:var(--warn);border:1px solid var(--warn);border-radius:99px;padding:2px 7px;margin-left:6px}
-/* 今日の出勤タブ */
-.attend-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px}
-.attend-card.working{border-color:var(--success)}
-.tap-btn{border:none;border-radius:var(--radius-sm);padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:all 0.15s}
-.tap-btn.on{background:var(--success);color:#0f1f17}
-.tap-btn.off{background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
-.tap-btn.photo-on{background:var(--accent2);color:#fff}
+.tap-btn{border:none;border-radius:var(--radius-sm);padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans JP',sans-serif}
+.tap-on{background:var(--success);color:#0f1f17}
+.tap-off{background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
+.tap-photo-on{background:var(--accent2);color:#fff}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 </style>
@@ -93,13 +90,13 @@ textarea{resize:none;line-height:1.6}
     <div class="topbar-title">Cast<span>DB</span></div>
     <button class="add-btn-main" onclick="openAdd()">＋ 追加</button>
   </div>
-  <div style="padding:0 16px 12px">
-    <input id="searchInput" type="text" placeholder="🔍 キャストを検索..." oninput="renderList()" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;padding:10px 14px;width:100%;color:var(--text)"/>
+  <div class="search-wrap">
+    <input id="searchInput" class="search-input" type="text" placeholder="🔍 キャストを検索..." oninput="renderList()"/>
   </div>
-  <div id="syncStatus" class="sync-status"><div class="sync-dot" style="background:var(--text3)"></div><span>接続中...</span></div>
+  <div id="syncBar" class="sync-bar"><div class="sync-dot"></div><span>接続中...</span></div>
   <div class="tab-bar">
     <button class="tab active" onclick="switchTab('list',this)">一覧</button>
-    <button class="tab" onclick="switchTab('today',this)">出勤記録</button>
+    <button class="tab" onclick="switchTab('today',this)">出勤</button>
     <button class="tab" onclick="switchTab('ranking',this)">売上</button>
     <button class="tab" onclick="switchTab('consult',this)">相談</button>
     <button class="tab" onclick="switchTab('settings',this)">⚙️</button>
@@ -109,25 +106,6 @@ textarea{resize:none;line-height:1.6}
   <div id="ranking" class="sec"></div>
   <div id="consult" class="sec"></div>
   <div id="settings" class="sec"></div>
-</div>
-
-<!-- APIキー -->
-<div id="keyModal" style="display:none">
-  <div class="overlay" onclick="if(event.target===this)closeKeyModal()">
-    <div class="sheet">
-      <div class="sheet-handle"></div>
-      <p class="sheet-title">🔑 Anthropic APIキー設定</p>
-      <div class="fg">
-        <label class="fl">APIキー</label>
-        <input id="keyInput" type="text" placeholder="sk-ant-..." autocomplete="off"/>
-        <div style="font-size:11px;color:var(--text3);margin-top:8px;line-height:1.7">このデバイスにのみ保存されます。<br>取得：<a href="https://console.anthropic.com" target="_blank" style="color:var(--accent)">console.anthropic.com</a></div>
-      </div>
-      <div class="brow">
-        <button class="btn btn-c" onclick="clearKey()">削除</button>
-        <button class="btn btn-p" onclick="saveKey()">保存</button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- キャスト追加/編集 -->
@@ -142,7 +120,7 @@ textarea{resize:none;line-height:1.6}
       <div class="fg"><label class="fl">プロフURL（任意）</label><input id="f-url" placeholder="https://..."/></div>
       <div class="fg"><label class="fl">強み・特徴</label><textarea id="f-strength" rows="2" placeholder="明るい、常連が多いなど"></textarea></div>
       <div class="fg"><label class="fl">課題・弱み</label><textarea id="f-weakness" rows="2" placeholder="遅刻が多め、ドリンクバック率低いなど"></textarea></div>
-      <div class="fg"><label class="fl">趣味・好きなもの</label><textarea id="f-interests" rows="2" placeholder="野球（阪神）、アニメ（〇〇）、歌手（〇〇）など"></textarea></div>
+      <div class="fg"><label class="fl">趣味・好きなもの</label><textarea id="f-interests" rows="2" placeholder="野球（阪神）、アニメ（〇〇）など"></textarea></div>
       <div class="fg"><label class="fl">メモ</label><textarea id="f-memo" rows="2" placeholder="直近の面談内容など"></textarea></div>
       <div class="brow">
         <button class="btn btn-c" onclick="closeAdd()">キャンセル</button>
@@ -203,19 +181,19 @@ textarea{resize:none;line-height:1.6}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getFirestore, collection, doc, onSnapshot, updateDoc, addDoc, arrayUnion, serverTimestamp, query, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { getFirestore, collection, doc, onSnapshot, updateDoc, addDoc, arrayUnion, deleteDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAeSQpMbMASXGdNtKAkBFIAriuXEpilXzA",
-  authDomain: "cast-management-47c1f.firebaseapp.com",
-  projectId: "cast-management-47c1f",
-  storageBucket: "cast-management-47c1f.firebasestorage.app",
-  messagingSenderId: "1094441321205",
-  appId: "1:1094441321205:web:b5daf7f9101042f1173bbc"
+const FB = {
+  apiKey:"AIzaSyAeSQpMbMASXGdNtKAkBFIAriuXEpilXzA",
+  authDomain:"cast-management-47c1f.firebaseapp.com",
+  projectId:"cast-management-47c1f",
+  storageBucket:"cast-management-47c1f.firebasestorage.app",
+  messagingSenderId:"1094441321205",
+  appId:"1:1094441321205:web:b5daf7f9101042f1173bbc"
 };
-
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(FB);
 const db = getFirestore(app);
+const castsRef = collection(db,'casts');
 
 const COLS=[
   {bg:'#3d2b6e',t:'#c4b5fd'},{bg:'#1a3a2e',t:'#6ee7b7'},
@@ -228,555 +206,479 @@ let casts=[], castsMap={};
 let editTarget=null, monthTarget=null, memoTarget=null;
 let chatHistories={};
 let currentDetailId=null;
-let todayAttendance={};
-let attendanceDate=today();
+let attendanceDate=todayStr();
 
+// ===== ユーティリティ =====
 function col(i){ return COLS[i%COLS.length]; }
-function fmt(n){ return Number(n).toLocaleString('ja-JP'); }
-function ini(n){ return n?n.slice(0,2):'?'; }
-function today(){
-  const now=new Date();
-  // 朝5時前は前日扱い
-  if(now.getHours()<5) now.setDate(now.getDate()-1);
-  return now.toISOString().slice(0,10);
+function ini(n){ return n ? n.slice(0,2) : '?'; }
+function todayStr(){
+  const d=new Date();
+  return d.toISOString().slice(0,10);
 }
-function thisMonth(){ return new Date().toISOString().slice(0,7); }
+function thisMonth(){
+  return new Date().toISOString().slice(0,7);
+}
+function fmt(n){
+  return Number(n).toLocaleString('ja-JP');
+}
+function getDaysAgo(n){
+  const d=new Date();
+  d.setDate(d.getDate()-n);
+  return d.toISOString().slice(0,10);
+}
+function formatDateBtn(s){
+  const d=new Date(s);
+  return (d.getMonth()+1)+'/'+(d.getDate());
+}
 function daysSince(dateStr){
   if(!dateStr) return 999;
-  // 朝5時を日付変更とする
   const now=new Date();
-  const adjustedNow=new Date(now.getTime() - 5*60*60*1000);
-  const target=new Date(dateStr+'T05:00:00');
-  const diff=adjustedNow-target;
-  return Math.floor(diff/86400000);
+  const adj=new Date(now.getTime()-5*60*60*1000);
+  const target=new Date(dateStr);
+  return Math.floor((adj-target)/86400000);
 }
 function lastMemoDate(c){
   if(!c.memos||!c.memos.length) return null;
-  return c.memos.slice().sort((a,b)=>b.date.localeCompare(a.date))[0].date;
-}
-function lastAttendDate(id){
-  // 過去30日分チェック
-  for(let i=0;i<=30;i++){
-    const d=new Date();
-    d.setDate(d.getDate()-i);
-    const dateStr=d.toISOString().slice(0,10);
-    const saved=lsGet('attend_'+dateStr);
-    if(!saved) continue;
-    const att=JSON.parse(saved);
-    if(att[id]&&att[id].working) return dateStr;
-  }
-  return null;
-}
-function attendLabel(id){
-  const date=lastAttendDate(id);
-  if(!date) return null;
-  const days=daysSince(date);
-  if(days===0) return '今日出勤';
-  if(days<=6) return `${days}日前出勤`;
-  return '7日以上前出勤';
-}
-function attendLabelColor(id){
-  const date=lastAttendDate(id);
-  if(!date) return 'var(--text3)';
-  const days=daysSince(date);
-  if(days===0) return 'var(--success)';
-  if(days<=3) return 'var(--accent)';
-  if(days<=6) return 'var(--warn)';
-  return 'var(--text3)';
+  const sorted=c.memos.slice().sort(function(a,b){ return b.date>a.date?1:-1; });
+  return sorted[0].date;
 }
 
+// ===== localStorage =====
 function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
 function lsDel(k){ try{ localStorage.removeItem(k); }catch(e){} }
-
 function getKey(){ return lsGet('cast_apikey')||''; }
-function saveKey(){
-  const v=document.getElementById('keyInput').value.trim();
-  if(!v){ alert('APIキーを入力してください'); return; }
-  lsSet('cast_apikey',v); closeKeyModal(); renderKeyBanner();
-}
-function clearKey(){ lsDel('cast_apikey'); document.getElementById('keyInput').value=''; closeKeyModal(); renderKeyBanner(); }
-function openKeyModal(){ document.getElementById('keyInput').value=getKey(); document.getElementById('keyModal').style.display='block'; }
-function closeKeyModal(){ document.getElementById('keyModal').style.display='none'; }
-function renderKeyBanner(){ renderSettings(); }
 
-function setSyncStatus(status){
-  const el=document.getElementById('syncStatus');
-  if(status==='ok') el.innerHTML=`<div class="sync-dot" style="background:#34d399"></div><span>同期済み</span>`;
-  else if(status==='saving') el.innerHTML=`<div class="sync-dot" style="background:#fde68a"></div><span>保存中...</span>`;
-  else el.innerHTML=`<div class="sync-dot" style="background:#f87171"></div><span>オフライン</span>`;
-}
-
-// 出勤データ管理（今日・昨日対応）
-function getAttendanceHistory(castId, days=14){
-  const result=[];
-  for(let i=0;i<days;i++){
-    const d=getDaysAgo(i);
-    const saved=lsGet('attend_'+d);
-    if(saved){
-      const att=JSON.parse(saved);
-      if(att[castId]&&att[castId].working) result.push(d);
-    }
-  }
-  return result; // 新しい順
-}
-
-function getRecentAttendanceStatus(castId){
-  const t=today();
-  // 直近7日+今日の出勤状況
-  const days=[];
-  for(let i=0;i<=6;i++){
-    const d=getDaysAgo(i);
-    const saved=lsGet('attend_'+d);
-    const working=saved?JSON.parse(saved)[castId]?JSON.parse(saved)[castId].working:false:false;
-    days.push({date:d,working});
-  }
-  // 最終出勤日
-  const lastWorked=days.find(d=>d.working);
-  // 連勤計算（今日から連続して出勤している日数）
-  let streak=0;
-  for(const d of days){
-    if(d.working) streak++;
-    else break;
-  }
-  return {days, lastWorked:(lastWorked&&lastWorked.date)||null, streak};
-}
-function getYesterday(){
-  const d=new Date(); d.setDate(d.getDate()-1);
-  return d.toISOString().slice(0,10);
-}
-function getDaysAgo(n){
-  const d=new Date(); d.setDate(d.getDate()-n);
-  return d.toISOString().slice(0,10);
-}
-function formatDateBtn(dateStr){
-  const d=new Date(dateStr);
-  return `${d.getMonth()+1}/${d.getDate()}`;
-}
+// ===== 出勤管理 =====
+let todayAttendance={};
 function loadAttendance(date){
-  const saved=lsGet('attend_'+date);
-  todayAttendance=saved?JSON.parse(saved):{};
+  const s=lsGet('attend_'+date);
+  todayAttendance=s?JSON.parse(s):{};
   attendanceDate=date;
 }
 function saveAttendance(){
   lsSet('attend_'+attendanceDate,JSON.stringify(todayAttendance));
 }
-function switchAttendDate(date){
+function getAttend(id){ return todayAttendance[id]||{working:false,photo:false}; }
+function lastAttendDate(id){
+  for(var i=0;i<=30;i++){
+    var d=getDaysAgo(i);
+    var s=lsGet('attend_'+d);
+    if(!s) continue;
+    var att=JSON.parse(s);
+    if(att[id]&&att[id].working) return d;
+  }
+  return null;
+}
+function attendLabel(id){
+  var date=lastAttendDate(id);
+  if(!date) return null;
+  var days=daysSince(date);
+  if(days===0) return '今日出勤';
+  if(days<=6) return days+'日前出勤';
+  return '7日以上前出勤';
+}
+function attendColor(id){
+  var date=lastAttendDate(id);
+  if(!date) return 'var(--text3)';
+  var days=daysSince(date);
+  if(days===0) return 'var(--success)';
+  if(days<=3) return 'var(--accent)';
+  if(days<=6) return 'var(--warn)';
+  return 'var(--text3)';
+}
+window.toggleAttend=function(id){
+  var att=getAttend(id);
+  todayAttendance[id]={working:!att.working,photo:att.working?false:att.photo};
+  saveAttendance();
+  renderToday();
+};
+window.togglePhoto=function(id){
+  var att=getAttend(id);
+  todayAttendance[id]={working:att.working,photo:!att.photo};
+  saveAttendance();
+  renderToday();
+};
+window.switchAttendDate=function(date){
   loadAttendance(date);
   renderToday();
-}
-function toggleAttend(id){
-  if(!todayAttendance[id]) todayAttendance[id]={working:false,photo:false};
-  todayAttendance[id].working=!todayAttendance[id].working;
-  if(!todayAttendance[id].working) todayAttendance[id].photo=false;
-  saveAttendance();
-  renderToday();
-}
-function togglePhoto(id){
-  if(!todayAttendance[id]) todayAttendance[id]={working:false,photo:false};
-  todayAttendance[id].photo=!todayAttendance[id].photo;
-  saveAttendance();
-  renderToday();
-}
-window.toggleAttend=toggleAttend;
-window.togglePhoto=togglePhoto;
-window.switchAttendDate=switchAttendDate;
+};
 
-const castsRef=collection(db,'casts');
-onSnapshot(query(castsRef,orderBy('createdAt','asc')),(snapshot)=>{
+// ===== Firebase =====
+onSnapshot(query(castsRef,orderBy('createdAt','asc')),function(snap){
   casts=[]; castsMap={};
-  snapshot.forEach(docSnap=>{
-    const data={id:docSnap.id,...docSnap.data()};
-    casts.push(data); castsMap[docSnap.id]=data;
-    if(data.chatHistory) chatHistories['cast_'+docSnap.id]=data.chatHistory;
+  snap.forEach(function(d){
+    var data=Object.assign({id:d.id},d.data());
+    casts.push(data);
+    castsMap[d.id]=data;
+    if(data.chatHistory) chatHistories['cast_'+d.id]=data.chatHistory;
   });
-  render(); setSyncStatus('ok');
+  render();
+  setSyncStatus('ok');
   if(currentDetailId&&castsMap[currentDetailId]){
-    const idx=casts.findIndex(c=>c.id===currentDetailId);
+    var idx=casts.findIndex(function(c){ return c.id===currentDetailId; });
     if(idx>=0) renderDetailContent(idx);
   }
-},(err)=>{ setSyncStatus('error'); console.error(err); });
+},function(e){ setSyncStatus('err'); console.error(e); });
 
-function switchTab(tab,el){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+function setSyncStatus(s){
+  var el=document.getElementById('syncBar');
+  if(s==='ok') el.innerHTML='<div class="sync-dot" style="background:var(--success)"></div><span>同期済み</span>';
+  else if(s==='saving') el.innerHTML='<div class="sync-dot" style="background:var(--warn)"></div><span>保存中...</span>';
+  else el.innerHTML='<div class="sync-dot" style="background:var(--danger)"></div><span>オフライン</span>';
+}
+
+// ===== タブ =====
+window.switchTab=function(tab,el){
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
   el.classList.add('active');
-  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.sec').forEach(function(s){ s.classList.remove('active'); });
   document.getElementById(tab).classList.add('active');
   render();
-}
-window.switchTab=switchTab;
+};
 
 function render(){ renderList(); renderToday(); renderRanking(); renderConsult(); renderSettings(); }
-window.renderList=renderList;
 
-function renderSettings(){
-  const el=document.getElementById('settings');
-  const key=getKey();
-  el.innerHTML=`
-    <div style="padding:8px 0">
-      <div class="sec-label">APIキー設定</div>
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px">
-        <div style="font-size:13px;color:var(--text2);margin-bottom:12px">AIチャット・会話ネタ検索に使用します。<br><a href="https://console.anthropic.com" target="_blank" style="color:var(--accent)">console.anthropic.com</a> で取得</div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <input id="keyInputSettings" type="text" placeholder="sk-ant-..." value="${key}" style="flex:1;font-size:13px"/>
-          <button onclick="saveKeyFromSettings()" style="background:var(--accent2);color:#fff;border:none;border-radius:var(--radius-sm);padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans JP',sans-serif;white-space:nowrap">保存</button>
-        </div>
-        ${key?`<div style="font-size:11px;color:var(--success);margin-top:8px">✓ 設定済み (...${key.slice(-4)})</div>`:`<div style="font-size:11px;color:var(--danger);margin-top:8px">未設定</div>`}
-      </div>
-      <div class="sec-label">同期状態</div>
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px">
-        <div id="syncStatusSettings" style="font-size:13px;color:var(--text2)">Firebase接続中...</div>
-      </div>
-    </div>
-  `;
-}
-function saveKeyFromSettings(){
-  const v=document.getElementById('keyInputSettings').value.trim();
-  if(!v){ alert('APIキーを入力してください'); return; }
-  lsSet('cast_apikey',v); renderSettings(); renderKeyBanner();
-  alert('APIキーを保存しました！');
-}
-window.saveKeyFromSettings=saveKeyFromSettings;
-
-function renderList(){
-  const el=document.getElementById('list');
-  const q=((document.getElementById('searchInput')||{}).value||'').trim().toLowerCase();
+// ===== 一覧 =====
+window.renderList=function(){
+  var el=document.getElementById('list');
+  var q=(document.getElementById('searchInput').value||'').trim().toLowerCase();
   if(!casts.length){
-    el.innerHTML='<div class="empty"><div style="font-size:40px;margin-bottom:12px">👥</div><p style="font-size:14px;line-height:1.8">キャストがまだいません<br>右上の「追加」から登録してください</p></div>';
+    el.innerHTML='<div class="empty"><div style="font-size:40px;margin-bottom:12px">👥</div><p style="font-size:14px;line-height:1.8">キャストがまだいません</p></div>';
     return;
   }
-  const sorted=[...casts].map((c,i)=>({...c,_i:i,days:daysSince(lastMemoDate(c))}))
-    .sort((a,b)=>b.days-a.days);
-  const filtered=q?sorted.filter(c=>c.name.toLowerCase().includes(q)):sorted;
-  if(!filtered.length){ el.innerHTML='<div class="empty" style="padding:40px 16px">該当するキャストが見つかりません</div>'; return; }
-  el.innerHTML=filtered.map(c=>{
-    const cl=col(c._i);
-    const months=(c.monthly||[]).slice().sort((a,b)=>b.ym.localeCompare(a.ym));
-    const latest=months[0],prev=months[1];
-    const diff=latest&&prev?+(latest.sales-prev.sales).toFixed(1):null;
-    const isAlert=c.days>=7;
-    const isWarn=c.days>=4&&c.days<7;
-    return `<div class="cast-card${isAlert?' alert':''}" onclick="openDetail(${c._i})">
-      <div style="display:flex;align-items:center;gap:12px">
-        <div class="avatar" style="width:44px;height:44px;font-size:15px;background:${cl.bg};color:${cl.t}">${ini(c.name)}</div>
-        <div style="flex:1">
-          <div style="font-size:15px;font-weight:700">${c.name}${isAlert?`<span class="alert-badge">7日以上情報更新なし</span>`:isWarn?`<span class="warn-badge">${c.days}日未更新</span>`:''}</div>
-          <div style="font-size:12px;color:var(--text2);margin-top:2px">${c.age?c.age+'歳':''}${c.tenure?' · 入店'+c.tenure:''}</div>
-          ${attendLabel(c.id)?`<div style="font-size:11px;color:${attendLabelColor(c.id)};margin-top:3px">🏃 ${attendLabel(c.id)}</div>`:''}
-        </div>
-        <span style="color:var(--text3);font-size:18px">›</span>
-      </div>
-      <div class="stat2">
-        <div class="stat"><div class="stat-l">最新売上</div><div class="stat-v" style="color:${cl.t}">${latest?fmt(latest.sales)+'万':'―'}</div></div>
-        <div class="stat"><div class="stat-l">前月比</div><div class="stat-v" style="color:${diff===null?'var(--text)':diff>=0?'var(--success)':'var(--danger)'}">${diff===null?'―':(diff>=0?'+':'')+fmt(Math.abs(diff))+'万'}</div></div>
-      </div>
-    </div>`;
+  var sorted=casts.map(function(c,i){ return Object.assign({},c,{_i:i,days:daysSince(lastMemoDate(c))}); })
+    .sort(function(a,b){ return b.days-a.days; });
+  var filtered=q?sorted.filter(function(c){ return c.name.toLowerCase().indexOf(q)>=0; }):sorted;
+  if(!filtered.length){
+    el.innerHTML='<div class="empty" style="padding:40px 16px">該当するキャストが見つかりません</div>';
+    return;
+  }
+  el.innerHTML=filtered.map(function(c){
+    var cl=col(c._i);
+    var months=(c.monthly||[]).slice().sort(function(a,b){ return b.ym>a.ym?1:-1; });
+    var latest=months[0]||null;
+    var prev=months[1]||null;
+    var diff=null;
+    if(latest&&prev) diff=+(latest.sales-prev.sales).toFixed(1);
+    var isAlert=c.days>=7;
+    var isWarn=c.days>=4&&c.days<7;
+    var aLabel=attendLabel(c.id);
+    var aColor=attendColor(c.id);
+    var diffColor=diff===null?'var(--text)':diff>=0?'var(--success)':'var(--danger)';
+    var diffText=diff===null?'―':(diff>=0?'+':'')+fmt(Math.abs(diff))+'万';
+    return '<div class="card'+(isAlert?' alert-border':'')+'" onclick="openDetail('+c._i+')">'
+      +'<div style="display:flex;align-items:center;gap:12px">'
+      +'<div class="avatar" style="width:44px;height:44px;font-size:15px;background:'+cl.bg+';color:'+cl.t+'">'+ini(c.name)+'</div>'
+      +'<div style="flex:1">'
+      +'<div style="font-size:15px;font-weight:700">'+c.name+(isAlert?'<span class="badge badge-danger">7日以上情報更新なし</span>':isWarn?'<span class="badge badge-warn">'+c.days+'日未更新</span>':'')+'</div>'
+      +'<div style="font-size:12px;color:var(--text2);margin-top:2px">'+(c.age?c.age+'歳':'')+(c.tenure?' · 入店'+c.tenure:'')+'</div>'
+      +(aLabel?'<div style="font-size:11px;color:'+aColor+';margin-top:3px">🏃 '+aLabel+'</div>':'')
+      +'</div>'
+      +'<span style="color:var(--text3);font-size:18px">›</span>'
+      +'</div>'
+      +'<div class="stat2">'
+      +'<div class="stat"><div class="stat-l">最新売上</div><div class="stat-v" style="color:'+cl.t+'">'+(latest?fmt(latest.sales)+'万':'―')+'</div></div>'
+      +'<div class="stat"><div class="stat-l">前月比</div><div class="stat-v" style="color:'+diffColor+'">'+diffText+'</div></div>'
+      +'</div>'
+      +'</div>';
   }).join('');
-}
+};
+var renderList=window.renderList;
 
+// ===== 出勤タブ =====
 function renderToday(){
-  const el=document.getElementById('today');
+  var el=document.getElementById('today');
   if(!casts.length){ el.innerHTML='<div class="empty">キャストを登録してください</div>'; return; }
-
-  const workingCasts=casts.filter(c=>todayAttendance[c.id]&&todayAttendance[c.id].working);
-  const alertCasts=casts.filter(c=>daysSince(lastMemoDate(c))>=7);
-
-  let html='';
-
-  // 3日間切り替え
-  const days3=[today(),getDaysAgo(1),getDaysAgo(2)];
-  const labels=['今日','昨日','一昨日'];
-  html+=`<div style="display:flex;gap:4px;margin-bottom:14px">
-    ${days3.map((d,i)=>`<button onclick="switchAttendDate('${d}')" style="flex:1;padding:7px 0;border-radius:var(--radius-sm);font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans JP',sans-serif;border:1px solid var(--border);background:${attendanceDate===d?'var(--accent2)':'var(--bg3)'};color:${attendanceDate===d?'#fff':'var(--text2)'}">${labels[i]}<br><span style="font-size:10px;font-weight:400">${formatDateBtn(d)}</span></button>`).join('')}
-  </div>`;
-
-  // 要注意キャストバナー
+  var alertCasts=casts.filter(function(c){ return daysSince(lastMemoDate(c))>=7; });
+  var workingCasts=casts.filter(function(c){ var a=getAttend(c.id); return a.working; });
+  var html='';
+  // 3日間切替
+  var days3=[todayStr(),getDaysAgo(1),getDaysAgo(2)];
+  var labels=['今日','昨日','一昨日'];
+  html+='<div style="display:flex;gap:4px;margin-bottom:14px">';
+  for(var di=0;di<3;di++){
+    var isActive=attendanceDate===days3[di];
+    html+='<button onclick="switchAttendDate(\''+days3[di]+'\')" style="flex:1;padding:7px 0;border-radius:var(--radius-sm);font-size:12px;font-weight:700;cursor:pointer;font-family:\'Noto Sans JP\',sans-serif;border:1px solid var(--border);background:'+(isActive?'var(--accent2)':'var(--bg3)')+';color:'+(isActive?'#fff':'var(--text2)')+'">'+labels[di]+'<br><span style="font-size:10px;font-weight:400">'+formatDateBtn(days3[di])+'</span></button>';
+  }
+  html+='</div>';
+  // アラート
   if(alertCasts.length){
-    html+=`<div style="background:rgba(248,113,113,0.1);border:1px solid var(--danger);border-radius:var(--radius);padding:12px 14px;margin-bottom:14px">
-      <div style="font-size:12px;font-weight:700;color:var(--danger);margin-bottom:8px">⚠️ 7日以上情報更新なし</div>
-      ${alertCasts.map(c=>`<div style="font-size:13px;color:var(--text2);padding:3px 0">${c.name} <span style="color:var(--text3);font-size:11px">（${daysSince(lastMemoDate(c))}日前）</span></div>`).join('')}
-    </div>`;
+    html+='<div style="background:rgba(248,113,113,0.1);border:1px solid var(--danger);border-radius:var(--radius);padding:12px 14px;margin-bottom:14px">'
+      +'<div style="font-size:12px;font-weight:700;color:var(--danger);margin-bottom:8px">⚠️ 7日以上情報更新なし</div>'
+      +alertCasts.map(function(c){ return '<div style="font-size:13px;color:var(--text2);padding:3px 0">'+c.name+' <span style="color:var(--text3);font-size:11px">（'+daysSince(lastMemoDate(c))+'日前）</span></div>'; }).join('')
+      +'</div>';
   }
-
-  html+=`<div style="font-size:12px;color:var(--text2);margin-bottom:10px">${attendanceDate} の出勤記録</div>`;
-  html+=casts.map(c=>{
-    const i=casts.indexOf(c);
-    const cl=col(i);
-    const att=todayAttendance[c.id]||{working:false,photo:false};
-    return `<div class="attend-card${att.working?' working':''}">
-      <div style="display:flex;align-items:center;gap:10px">
-        <div class="avatar" style="width:38px;height:38px;font-size:14px;background:${cl.bg};color:${cl.t}">${ini(c.name)}</div>
-        <div style="flex:1"><div style="font-size:14px;font-weight:700">${c.name}</div></div>
-        <button class="tap-btn ${att.working?'on':'off'}" onclick="toggleAttend('${c.id}')">
-          ${att.working?'✓ 出勤':'出勤'}
-        </button>
-      </div>
-      ${att.working?`<div style="display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
-        <span style="font-size:12px;color:var(--text2);flex:1">写メUP</span>
-        <button class="tap-btn ${att.photo?'photo-on':'off'}" onclick="togglePhoto('${c.id}')">
-          ${att.photo?'📸 UP済み':'UPなし'}
-        </button>
-      </div>`:''}
-    </div>`;
-  }).join('');
-
+  html+='<div style="font-size:12px;color:var(--text2);margin-bottom:10px">'+attendanceDate+' の出勤記録</div>';
+  casts.forEach(function(c,i){
+    var cl=col(i);
+    var att=getAttend(c.id);
+    html+='<div class="card'+(att.working?' working-border':'')+'">'
+      +'<div style="display:flex;align-items:center;gap:10px">'
+      +'<div class="avatar" style="width:38px;height:38px;font-size:14px;background:'+cl.bg+';color:'+cl.t+'">'+ini(c.name)+'</div>'
+      +'<div style="flex:1"><div style="font-size:14px;font-weight:700">'+c.name+'</div></div>'
+      +'<button class="tap-btn '+(att.working?'tap-on':'tap-off')+'" onclick="toggleAttend(\''+c.id+'\')">'+(att.working?'✓ 出勤':'出勤')+'</button>'
+      +'</div>';
+    if(att.working){
+      html+='<div style="display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">'
+        +'<span style="font-size:12px;color:var(--text2);flex:1">写メUP</span>'
+        +'<button class="tap-btn '+(att.photo?'tap-photo-on':'tap-off')+'" onclick="togglePhoto(\''+c.id+'\')">'+(att.photo?'📸 UP済み':'UPなし')+'</button>'
+        +'</div>';
+    }
+    html+='</div>';
+  });
   if(workingCasts.length){
-    const photoRate=workingCasts.filter(c=>todayAttendance[c.id]&&todayAttendance[c.id].photo).length;
-    html+=`<div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-top:14px">
-      <div style="font-size:12px;color:var(--text3);margin-bottom:8px">${attendanceDate} サマリー</div>
-      <div class="stat2">
-        <div class="stat"><div class="stat-l">出勤数</div><div class="stat-v">${workingCasts.length}人</div></div>
-        <div class="stat"><div class="stat-l">写メUP</div><div class="stat-v" style="color:var(--accent)">${photoRate}/${workingCasts.length}</div></div>
-      </div>
-    </div>`;
+    var photoCount=workingCasts.filter(function(c){ return getAttend(c.id).photo; }).length;
+    html+='<div class="card" style="margin-top:14px;cursor:default">'
+      +'<div style="font-size:12px;color:var(--text3);margin-bottom:8px">本日サマリー</div>'
+      +'<div class="stat2">'
+      +'<div class="stat"><div class="stat-l">出勤数</div><div class="stat-v">'+workingCasts.length+'人</div></div>'
+      +'<div class="stat"><div class="stat-l">写メUP</div><div class="stat-v" style="color:var(--accent)">'+photoCount+'/'+workingCasts.length+'</div></div>'
+      +'</div></div>';
   }
-
-  // 月集計ボタン
-  html+=`<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
-    <div style="font-size:11px;color:var(--text3);margin-bottom:8px">月次データに反映</div>
-    <button onclick="autoAggregateMonth()" style="width:100%;padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer;color:var(--accent);font-family:'Noto Sans JP',sans-serif">📊 今月の出勤データを月次に集計する</button>
-  </div>`;
-
+  html+='<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">'
+    +'<div style="font-size:11px;color:var(--text3);margin-bottom:8px">月次データに反映</div>'
+    +'<button onclick="autoAggregateMonth()" style="width:100%;padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer;color:var(--accent);font-family:\'Noto Sans JP\',sans-serif">📊 今月の出勤データを月次に集計する</button>'
+    +'</div>';
   el.innerHTML=html;
 }
 
+// ===== 売上ランキング =====
 function renderRanking(){
-  const el=document.getElementById('ranking');
+  var el=document.getElementById('ranking');
   if(!casts.length){ el.innerHTML='<div class="empty">データがありません</div>'; return; }
-  const data=casts.map((c,i)=>{
-    const m=(c.monthly||[]).slice().sort((a,b)=>b.ym.localeCompare(a.ym));
-    return{...c,_i:i,latest:m[0]||null,prev:m[1]||null};
-  }).sort((a,b)=>((b.latest&&b.latest.sales)||0)-((a.latest&&a.latest.sales)||0));
-  const max=data[0]?(data[0].latest&&data[0].latest.sales)||1:1;
-  const medals=['🥇','🥈','🥉'];
-  el.innerHTML=data.map((c,rank)=>{
-    const cl=col(c._i); const pct=Math.round(((c.latest&&c.latest.sales||0)/max)*100);
-    const diff=c.latest&&c.prev?+(c.latest.sales-c.prev.sales).toFixed(1):null;
-    const photoRate=c.latest&&c.latest.shifts?Math.round((c.latest.photos||0)/c.latest.shifts*100):null;
-    return `<div class="cast-card" onclick="openDetail(${c._i})">
-      <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:18px;min-width:28px">${medals[rank]||rank+1}</span>
-        <div class="avatar" style="width:36px;height:36px;font-size:13px;background:${cl.bg};color:${cl.t}">${ini(c.name)}</div>
-        <div style="flex:1"><div style="font-size:14px;font-weight:700">${c.name}</div>
-          <div style="background:var(--bg3);border-radius:99px;height:5px;margin-top:6px;overflow:hidden"><div style="background:${cl.t};height:5px;width:${pct}%;border-radius:99px"></div></div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-size:16px;font-weight:700;color:${cl.t}">${c.latest?c.fmt(latest.sales)+'万':'―'}</div>
-          ${diff!==null?`<div style="font-size:11px;color:${diff>=0?'var(--success)':'var(--danger)'}">${diff>=0?'+':''}${fmt(Math.abs(diff))}万</div>`:''}
-          ${photoRate!==null?`<div style="font-size:11px;color:var(--text3)">写メ${photoRate}%</div>`:''}
-        </div>
-      </div>
-    </div>`;
+  var data=casts.map(function(c,i){
+    var m=(c.monthly||[]).slice().sort(function(a,b){ return b.ym>a.ym?1:-1; });
+    return Object.assign({},c,{_i:i,latest:m[0]||null,prev:m[1]||null});
+  }).sort(function(a,b){
+    var as=a.latest?a.latest.sales:0;
+    var bs=b.latest?b.latest.sales:0;
+    return bs-as;
+  });
+  var max=data[0]&&data[0].latest?data[0].latest.sales:1;
+  if(!max) max=1;
+  var medals=['🥇','🥈','🥉'];
+  el.innerHTML=data.map(function(c,rank){
+    var cl=col(c._i);
+    var sales=c.latest?c.latest.sales:0;
+    var pct=Math.round((sales/max)*100);
+    var diff=null;
+    if(c.latest&&c.prev) diff=+(c.latest.sales-c.prev.sales).toFixed(1);
+    var photoRate=null;
+    if(c.latest&&c.latest.shifts&&c.latest.shifts>0) photoRate=Math.round((c.latest.photos||0)/c.latest.shifts*100);
+    return '<div class="card" onclick="openDetail('+c._i+')">'
+      +'<div style="display:flex;align-items:center;gap:10px">'
+      +'<span style="font-size:18px;min-width:28px">'+(medals[rank]||rank+1)+'</span>'
+      +'<div class="avatar" style="width:36px;height:36px;font-size:13px;background:'+cl.bg+';color:'+cl.t+'">'+ini(c.name)+'</div>'
+      +'<div style="flex:1">'
+      +'<div style="font-size:14px;font-weight:700">'+c.name+'</div>'
+      +'<div style="background:var(--bg3);border-radius:99px;height:5px;margin-top:6px;overflow:hidden"><div style="background:'+cl.t+';height:5px;width:'+pct+'%;border-radius:99px"></div></div>'
+      +'</div>'
+      +'<div style="text-align:right">'
+      +'<div style="font-size:16px;font-weight:700;color:'+cl.t+'">'+(c.latest?fmt(c.latest.sales)+'万':'―')+'</div>'
+      +(diff!==null?'<div style="font-size:11px;color:'+(diff>=0?'var(--success)':'var(--danger)')+'>">'+(diff>=0?'+':'')+fmt(Math.abs(diff))+'万</div>':'')
+      +(photoRate!==null?'<div style="font-size:11px;color:var(--text3)">写メ'+photoRate+'%</div>':'')
+      +'</div></div></div>';
   }).join('');
 }
 
+// ===== 相談タブ =====
 function renderConsult(){
-  const el=document.getElementById('consult');
-  const all=[];
-  casts.forEach((c,i)=>(c.memos||[]).forEach(m=>all.push({...m,castName:c.name,castIdx:i})));
-  all.sort((a,b)=>b.date.localeCompare(a.date));
+  var el=document.getElementById('consult');
+  var all=[];
+  casts.forEach(function(c,i){ (c.memos||[]).forEach(function(m){ all.push(Object.assign({},m,{castName:c.name,castIdx:i})); }); });
+  all.sort(function(a,b){ return b.date>a.date?1:-1; });
   if(!all.length){ el.innerHTML='<div class="empty"><div style="font-size:40px;margin-bottom:12px">💬</div><p style="font-size:14px">面談メモがまだありません</p></div>'; return; }
-  el.innerHTML=all.map(m=>{
-    const cl=col(m.castIdx);
-    return `<div class="cast-card" onclick="openDetail(${m.castIdx})">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-        <div class="avatar" style="width:30px;height:30px;font-size:12px;background:${cl.bg};color:${cl.t}">${ini(m.castName)}</div>
-        <span style="font-size:13px;font-weight:700">${m.castName}</span>
-        <span style="font-size:11px;color:var(--text3);margin-left:auto">${m.date}</span>
-      </div>
-      <div style="font-size:13px;color:var(--text2);line-height:1.7">${m.content}</div>
-    </div>`;
+  el.innerHTML=all.map(function(m){
+    var cl=col(m.castIdx);
+    return '<div class="card" onclick="openDetail('+m.castIdx+')">'
+      +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">'
+      +'<div class="avatar" style="width:30px;height:30px;font-size:12px;background:'+cl.bg+';color:'+cl.t+'">'+ini(m.castName)+'</div>'
+      +'<span style="font-size:13px;font-weight:700">'+m.castName+'</span>'
+      +'<span style="font-size:11px;color:var(--text3);margin-left:auto">'+m.date+'</span>'
+      +'</div>'
+      +'<div style="font-size:13px;color:var(--text2);line-height:1.7">'+m.content+'</div>'
+      +'</div>';
   }).join('');
 }
 
-function openDetail(i){
+// ===== 設定タブ =====
+function renderSettings(){
+  var el=document.getElementById('settings');
+  var key=getKey();
+  el.innerHTML='<div style="padding:8px 0">'
+    +'<div class="sec-label">APIキー設定</div>'
+    +'<div class="card" style="cursor:default">'
+    +'<div style="font-size:13px;color:var(--text2);margin-bottom:12px">AIチャット・会話ネタ検索に使用します。<br><a href="https://console.anthropic.com" target="_blank" style="color:var(--accent)">console.anthropic.com</a> で取得</div>'
+    +'<div style="display:flex;gap:8px;align-items:center">'
+    +'<input id="keyInputSettings" type="text" placeholder="sk-ant-..." value="'+key+'" style="flex:1;font-size:13px"/>'
+    +'<button onclick="saveKeySettings()" style="background:var(--accent2);color:#fff;border:none;border-radius:var(--radius-sm);padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:\'Noto Sans JP\',sans-serif;white-space:nowrap">保存</button>'
+    +'</div>'
+    +(key?'<div style="font-size:11px;color:var(--success);margin-top:8px">✓ 設定済み (...'+key.slice(-4)+')</div>':'<div style="font-size:11px;color:var(--danger);margin-top:8px">未設定</div>')
+    +'</div>'
+    +'<div class="sec-label">同期状態</div>'
+    +'<div class="card" style="cursor:default;font-size:13px;color:var(--text2)">Firebase接続 · データはリアルタイム同期されます</div>'
+    +'</div>';
+}
+window.saveKeySettings=function(){
+  var v=document.getElementById('keyInputSettings').value.trim();
+  if(!v){ alert('APIキーを入力してください'); return; }
+  lsSet('cast_apikey',v);
+  renderSettings();
+  alert('APIキーを保存しました！');
+};
+
+// ===== 詳細 =====
+window.openDetail=function(i){
   currentDetailId=casts[i].id;
   renderDetailContent(i);
   document.getElementById('detailView').style.display='block';
-}
-window.openDetail=openDetail;
+};
+window.closeDetail=function(){
+  document.getElementById('detailView').style.display='none';
+  currentDetailId=null;
+};
 
 function renderDetailContent(i){
-  const c=casts[i]; const cl=col(i);
-  const months=(c.monthly||[]).slice().sort((a,b)=>b.ym.localeCompare(a.ym));
-  const maxS=Math.max(...months.map(m=>m.sales||0),1);
-  const memos=(c.memos||[]).slice().reverse();
-  const chatKey='cast_'+c.id;
+  var c=casts[i]; var cl=col(i);
+  var months=(c.monthly||[]).slice().sort(function(a,b){ return b.ym>a.ym?1:-1; });
+  var maxS=Math.max.apply(null,months.map(function(m){ return m.sales||0; }).concat([1]));
+  var memos=(c.memos||[]).slice().reverse();
+  var chatKey='cast_'+c.id;
   if(!chatHistories[chatKey]) chatHistories[chatKey]=[];
-  const hasKey=!!getKey();
-  const days=daysSince(lastMemoDate(c));
+  var hasKey=!!getKey();
+  var days=daysSince(lastMemoDate(c));
 
-  // 出勤履歴
-  const attStatus=getRecentAttendanceStatus(c.id);
-  const lastWorkedLabel=()=>{
-    if(!attStatus.lastWorked) return '記録なし（7日以上）';
-    const diff=daysSince(attStatus.lastWorked);
-    if(diff===0) return '今日';
-    if(diff===1) return '昨日';
-    if(diff<=6) return `${diff}日前`;
-    return '7日以上前';
-  };
-  const attendHTML=`
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-      <div style="flex:1">
-        <div style="font-size:12px;color:var(--text3);margin-bottom:4px">直近の出勤</div>
-        <div style="font-size:15px;font-weight:700;color:${attStatus&&attStatus.lastWorked&&daysSince(attStatus.lastWorked)<=1?'var(--success)':'var(--text)'}">${lastWorkedLabel()}</div>
-      </div>
-      <div style="text-align:right">
-        <div style="font-size:12px;color:var(--text3);margin-bottom:4px">連勤</div>
-        <div style="font-size:15px;font-weight:700;color:${attStatus.streak>=3?'var(--warn)':attStatus.streak>=1?'var(--success)':'var(--text3)'}">${attStatus.streak>0?attStatus.streak+'日連続':'―'}</div>
-      </div>
-    </div>
-    <div style="display:flex;gap:4px">
-      ${attStatus.days.map((d,idx)=>{
-        const label=idx===0?'今日':idx===1?'昨日':`${idx}日前`;
-        return `<div style="flex:1;text-align:center">
-          <div style="width:100%;aspect-ratio:1;border-radius:50%;background:${d.working?'var(--success)':'var(--bg3)'};border:1px solid ${d.working?'var(--success)':'var(--border)'};margin:0 auto 3px;max-width:32px"></div>
-          <div style="font-size:9px;color:var(--text3)">${idx===0?'今日':idx===1?'昨':d.date.slice(8)}</div>
-        </div>`;
-      }).join('')}
-    </div>
-  `;
-    months.slice(0,6).map(m=>{
-        const pct=Math.round((m.sales/maxS)*100);
-        const photoRate=m.shifts?Math.round((m.photos||0)/m.shifts*100):null;
-        return `<div class="trend-row">
-          <span class="trend-label">${m.ym.slice(5)}月</span>
-          <div class="trend-bar-bg"><div class="trend-bar" style="width:${pct}%;background:${cl.t}"></div></div>
-          <span class="trend-val" style="color:${cl.t}">${m.sales}万</span>
-          ${m.shimei?`<span style="font-size:11px;color:var(--text3);min-width:28px">${m.shimei}本</span>`:''}
-          ${photoRate!==null?`<span style="font-size:11px;color:var(--accent);min-width:36px">📸${photoRate}%</span>`:''}
-        </div>`;
+  var trendHTML=months.length
+    ?months.slice(0,6).map(function(m){
+        var pct=Math.round((m.sales/maxS)*100);
+        var photoRate=m.shifts&&m.shifts>0?Math.round((m.photos||0)/m.shifts*100):null;
+        return '<div class="trend-row">'
+          +'<span class="trend-label">'+m.ym.slice(5)+'月</span>'
+          +'<div class="trend-bar-bg"><div class="trend-bar" style="width:'+pct+'%;background:'+cl.t+'"></div></div>'
+          +'<span class="trend-val" style="color:'+cl.t+'">'+fmt(m.sales)+'万</span>'
+          +(m.shimei?'<span style="font-size:11px;color:var(--text3);min-width:28px">'+m.shimei+'本</span>':'')
+          +(photoRate!==null?'<span style="font-size:11px;color:var(--accent);min-width:36px">📸'+photoRate+'%</span>':'')
+          +'</div>';
       }).join('')
     :'<div style="font-size:13px;color:var(--text3)">月次データなし</div>';
 
-  document.getElementById('detailContent').innerHTML=`
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px">
-      <div class="avatar" style="width:56px;height:56px;font-size:22px;background:${cl.bg};color:${cl.t}">${ini(c.name)}</div>
-      <div style="flex:1">
-        <div style="font-size:22px;font-weight:700">${c.name}</div>
-        <div style="font-size:13px;color:var(--text2);margin-top:2px">${c.age?c.age+'歳':''}${c.tenure?' · 入店'+c.tenure:''}</div>
-        ${days>=7?`<div style="font-size:11px;color:var(--danger);margin-top:3px">⚠️ ${days}日間メモ更新なし</div>`:days>=4?`<div style="font-size:11px;color:var(--warn);margin-top:3px">${days}日間メモ更新なし</div>`:''}
-      </div>
-      <div style="display:flex;flex-direction:column;gap:6px">
-        ${c.profileUrl?`<a href="${c.profileUrl}" target="_blank" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 10px;font-size:11px;color:var(--accent);text-decoration:none;text-align:center">HP</a>`:''}
-        <button onclick="openEdit(${i})" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 10px;font-size:11px;cursor:pointer;color:var(--text2);font-family:'Noto Sans JP',sans-serif">編集</button>
-      </div>
-    </div>
-    <div class="sec-label">直近の出勤状況</div>
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px">${attendHTML}</div>
-    <div class="sec-label">売上・写メ推移</div>
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px">${trendHTML}</div>
-    <button class="add-mini-btn" onclick="openMonthModal(${i})">＋ 月次データを追加</button>
-    ${c.interests?`<div class="sec-label">趣味・好きなもの</div><div class="info-box">${c.interests}</div>`:''}
-    ${c.strength?`<div class="sec-label">強み・特徴</div><div class="info-box">${c.strength}</div>`:''}
-    ${c.weakness?`<div class="sec-label">課題・弱み</div><div class="info-box">${c.weakness}</div>`:''}
-    ${c.memo?`<div class="sec-label">メモ</div><div class="info-box">${c.memo}</div>`:''}
-    <div class="sec-label">AIに相談</div>
-    ${hasKey?`
-    <div class="chat-wrap">
-      <div class="chat-msgs" id="chatMsgs_${i}">${renderChatHist(chatHistories[chatKey])}</div>
-      <div class="chat-input-row">
-        <textarea id="chatInput_${i}" rows="1" placeholder="例：売上推移どう思う？会話ネタ教えて"></textarea>
-        <button class="chat-send" onclick="sendChat(${i})">↑</button>
-      </div>
-    </div>`:`<div style="font-size:13px;color:var(--text3);padding:8px 0">APIキーが未設定です。<span style="color:var(--accent);cursor:pointer" onclick="openKeyModal()">タップして設定</span></div>`}
-    <div class="sec-label">面談・メモ記録</div>
-    ${memos.length?memos.map(m=>`<div class="hist-item"><div class="hist-date">${m.date}</div><div class="hist-content">${m.content}</div></div>`).join(''):'<div style="font-size:13px;color:var(--text3)">記録なし</div>'}
-    <button class="add-mini-btn" onclick="openMemoModal(${i})">＋ メモを追加</button>
-  `;
-  const cm=document.getElementById('chatMsgs_'+i);
+  document.getElementById('detailContent').innerHTML=
+    '<div style="display:flex;align-items:center;gap:14px;margin-bottom:24px">'
+    +'<div class="avatar" style="width:56px;height:56px;font-size:22px;background:'+cl.bg+';color:'+cl.t+'">'+ini(c.name)+'</div>'
+    +'<div style="flex:1">'
+    +'<div style="font-size:22px;font-weight:700">'+c.name+'</div>'
+    +'<div style="font-size:13px;color:var(--text2);margin-top:2px">'+(c.age?c.age+'歳':'')+(c.tenure?' · 入店'+c.tenure:'')+'</div>'
+    +(days>=7?'<div style="font-size:11px;color:var(--danger);margin-top:3px">⚠️ '+days+'日間情報更新なし</div>':days>=4?'<div style="font-size:11px;color:var(--warn);margin-top:3px">'+days+'日間情報更新なし</div>':'')
+    +'</div>'
+    +'<div style="display:flex;flex-direction:column;gap:6px">'
+    +(c.profileUrl?'<a href="'+c.profileUrl+'" target="_blank" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 10px;font-size:11px;color:var(--accent);text-decoration:none;text-align:center">HP</a>':'')
+    +'<button onclick="openEdit('+i+')" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 10px;font-size:11px;cursor:pointer;color:var(--text2);font-family:\'Noto Sans JP\',sans-serif">編集</button>'
+    +'</div></div>'
+    +'<div class="sec-label">売上・写メ推移</div>'
+    +'<div class="card" style="cursor:default">'+trendHTML+'</div>'
+    +'<button class="add-mini-btn" onclick="openMonthModal('+i+')">＋ 月次データを追加</button>'
+    +(c.interests?'<div class="sec-label">趣味・好きなもの</div><div class="info-box">'+c.interests+'</div>':'')
+    +(c.strength?'<div class="sec-label">強み・特徴</div><div class="info-box">'+c.strength+'</div>':'')
+    +(c.weakness?'<div class="sec-label">課題・弱み</div><div class="info-box">'+c.weakness+'</div>':'')
+    +(c.memo?'<div class="sec-label">メモ</div><div class="info-box">'+c.memo+'</div>':'')
+    +'<div class="sec-label">AIに相談</div>'
+    +(hasKey
+      ?'<div class="chat-wrap">'
+        +'<div class="chat-msgs" id="chatMsgs_'+i+'">'+renderChatHist(chatHistories[chatKey])+'</div>'
+        +'<div class="chat-input-row">'
+        +'<textarea id="chatInput_'+i+'" rows="1" placeholder="例：売上推移どう思う？会話ネタ教えて"></textarea>'
+        +'<button class="chat-send" onclick="sendChat('+i+')">↑</button>'
+        +'</div></div>'
+      :'<div style="font-size:13px;color:var(--text3);padding:8px 0">APIキーが未設定です。⚙️タブから設定してください。</div>')
+    +'<div class="sec-label">面談・メモ記録</div>'
+    +(memos.length?memos.map(function(m){ return '<div class="hist-item"><div class="hist-date">'+m.date+'</div><div class="hist-content">'+m.content+'</div></div>'; }).join(''):'<div style="font-size:13px;color:var(--text3)">記録なし</div>')
+    +'<button class="add-mini-btn" onclick="openMemoModal('+i+')">＋ メモを追加</button>';
+
+  var cm=document.getElementById('chatMsgs_'+i);
   if(cm) cm.scrollTop=cm.scrollHeight;
 }
 
 function renderChatHist(hist){
-  return hist.map(m=>`<div class="msg ${m.role==='user'?'msg-user':'msg-ai'}">${m.content.replace(/\n/g,'<br>')}</div>`).join('');
+  return hist.map(function(m){
+    return '<div class="msg '+(m.role==='user'?'msg-user':'msg-ai')+'">'+m.content.replace(/\n/g,'<br>')+'</div>';
+  }).join('');
 }
 
-async function sendChat(i){
-  const c=casts[i];
-  const inputEl=document.getElementById('chatInput_'+i);
-  const text=inputEl.value.trim(); if(!text) return;
+window.sendChat=async function(i){
+  var c=casts[i];
+  var inputEl=document.getElementById('chatInput_'+i);
+  var text=inputEl.value.trim();
+  if(!text) return;
   inputEl.value='';
-  const chatKey='cast_'+c.id;
+  var chatKey='cast_'+c.id;
   chatHistories[chatKey].push({role:'user',content:text});
-  const msgsEl=document.getElementById('chatMsgs_'+i);
+  var msgsEl=document.getElementById('chatMsgs_'+i);
   msgsEl.innerHTML=renderChatHist(chatHistories[chatKey])+'<div class="msg-thinking">考え中...</div>';
   msgsEl.scrollTop=msgsEl.scrollHeight;
 
-  const months=(c.monthly||[]).slice().sort((a,b)=>a.ym.localeCompare(b.ym));
-  const monthsText=months.length?months.map(m=>`${m.ym}：売上${m.sales}万円 指名${m.shimei||'?'}本 出勤${m.shifts||'?'}回 写メUP${m.photos||'?'}枚${m.memo?' ('+m.memo+')':''}`).join('\n'):'月次データなし';
-  const memosText=(c.memos||[]).length?(c.memos||[]).map(m=>`${m.date}：${m.content}`).join('\n'):'なし';
+  var months=(c.monthly||[]).slice().sort(function(a,b){ return a.ym>b.ym?1:-1; });
+  var monthsText=months.length?months.map(function(m){
+    return m.ym+'：売上'+m.sales+'万円 指名'+(m.shimei||'?')+'本 出勤'+(m.shifts||'?')+'回 写メUP'+(m.photos||'?')+'枚'+(m.memo?' ('+m.memo+')':'');
+  }).join('\n'):'月次データなし';
+  var memosText=(c.memos||[]).length?(c.memos||[]).map(function(m){ return m.date+'：'+m.content; }).join('\n'):'なし';
 
-  const sys=`あなたはナイトワーク店舗のマネジメントアドバイザーです。以下のキャスト情報をもとに、オーナーの質問に的確で実践的なアドバイスを日本語で返してください。簡潔に、箇条書きも活用してください。
-
-「会話ネタ」「話題」「ネタ」などのキーワードが含まれる質問の場合は、必ずweb_searchツールを使ってキャストの趣味・好きなものに関する最新ニュースや話題を検索してから回答してください。例：阪神の最新結果、好きなアニメの最新話、好きな歌手の新曲など。
-
-【キャスト名】${c.name}
-【年齢】${c.age||'不明'}歳
-【入店日】${c.tenure||'不明'}
-【趣味・好きなもの】${c.interests||'なし'}
-【強み・特徴】${c.strength||'なし'}
-【課題・弱み】${c.weakness||'なし'}
-【月次データ（古い順）】
-${monthsText}
-【面談・メモ記録】
-${memosText}`;
+  var sys='あなたはナイトワーク店舗のマネジメントアドバイザーです。以下のキャスト情報をもとに、オーナーの質問に的確で実践的なアドバイスを日本語で返してください。簡潔に、箇条書きも活用してください。\n\n「会話ネタ」「話題」「ネタ」などのキーワードが含まれる質問の場合は、必ずweb_searchツールを使ってキャストの趣味・好きなものに関する最新情報を検索してから回答してください。\n\n【キャスト名】'+c.name+'\n【年齢】'+(c.age||'不明')+'歳\n【入店日】'+(c.tenure||'不明')+'\n【趣味・好きなもの】'+(c.interests||'なし')+'\n【強み・特徴】'+(c.strength||'なし')+'\n【課題・弱み】'+(c.weakness||'なし')+'\n【月次データ（古い順）】\n'+monthsText+'\n【面談・メモ記録】\n'+memosText;
 
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
+    var res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':getKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1000,system:sys,messages:chatHistories[chatKey],tools:[{type:'web_search_20250305',name:'web_search'}]})
     });
-    const data=await res.json();
-    const blocks=data.content||[];
-    const reply=blocks.filter(b=>b.type==='text').map(b=>b.text).join('\n')||((data.error&&data.error.message)||'エラーが発生しました');
+    var data=await res.json();
+    var reply='';
+    if(data.content){
+      data.content.forEach(function(b){ if(b.type==='text') reply+=b.text; });
+    }
+    if(!reply) reply=(data.error&&data.error.message)||'エラーが発生しました';
     chatHistories[chatKey].push({role:'assistant',content:reply});
-    try{ await updateDoc(doc(db,'casts',c.id),{chatHistory:chatHistories[chatKey]}); }catch(e){ console.error('履歴保存失敗',e); }
+    try{ await updateDoc(doc(db,'casts',c.id),{chatHistory:chatHistories[chatKey]}); }catch(e){}
   }catch(e){
     chatHistories[chatKey].push({role:'assistant',content:'通信エラー。APIキーと接続を確認してください。'});
   }
   msgsEl.innerHTML=renderChatHist(chatHistories[chatKey]);
   msgsEl.scrollTop=msgsEl.scrollHeight;
-}
-window.sendChat=sendChat;
+};
 
-function closeDetail(){ document.getElementById('detailView').style.display='none'; currentDetailId=null; }
-window.closeDetail=closeDetail;
-
-function openAdd(){
+// ===== キャスト追加/編集/削除 =====
+window.openAdd=function(){
   editTarget=null;
   document.getElementById('addTitle').textContent='キャスト追加';
   document.getElementById('saveBtn').textContent='保存';
   document.getElementById('saveBtn').onclick=saveNew;
-  ['f-name','f-age','f-tenure','f-url','f-strength','f-weakness','f-interests','f-memo'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('deleteBtnWrap').style.display='none';
+  ['f-name','f-age','f-tenure','f-url','f-strength','f-weakness','f-interests','f-memo'].forEach(function(id){ document.getElementById(id).value=''; });
   document.getElementById('addModal').style.display='block';
-}
-window.openAdd=openAdd;
-function closeAdd(){ document.getElementById('addModal').style.display='none'; }
-window.closeAdd=closeAdd;
+};
+window.closeAdd=function(){ document.getElementById('addModal').style.display='none'; };
 
-async function saveNew(){
-  const name=document.getElementById('f-name').value.trim();
+window.saveNew=async function(){
+  var name=document.getElementById('f-name').value.trim();
   if(!name){ alert('源氏名を入力してください'); return; }
   setSyncStatus('saving');
   await addDoc(castsRef,{
-    name, age:document.getElementById('f-age').value,
+    name:name,
+    age:document.getElementById('f-age').value,
     tenure:document.getElementById('f-tenure').value,
     profileUrl:document.getElementById('f-url').value,
     strength:document.getElementById('f-strength').value,
     weakness:document.getElementById('f-weakness').value,
     interests:document.getElementById('f-interests').value,
     memo:document.getElementById('f-memo').value,
-    monthly:[], memos:[], createdAt:serverTimestamp()
+    monthly:[],memos:[],createdAt:serverTimestamp()
   });
-  closeAdd();
-}
-window.saveNew=saveNew;
+  window.closeAdd();
+};
 
-function openEdit(i){
-  editTarget=i; const c=casts[i];
+window.openEdit=function(i){
+  editTarget=i;
+  var c=casts[i];
   document.getElementById('f-name').value=c.name||'';
   document.getElementById('f-age').value=c.age||'';
   document.getElementById('f-tenure').value=c.tenure||'';
@@ -787,29 +689,19 @@ function openEdit(i){
   document.getElementById('f-memo').value=c.memo||'';
   document.getElementById('addTitle').textContent='キャスト情報を編集';
   document.getElementById('saveBtn').textContent='更新';
-  document.getElementById('saveBtn').onclick=saveEdit;
+  document.getElementById('saveBtn').onclick=window.saveEdit;
   document.getElementById('deleteBtnWrap').style.display='block';
   document.getElementById('addModal').style.display='block';
-}
-window.openEdit=openEdit;
+};
 
-async function deleteCast(){
-  const c=casts[editTarget];
-  if(!confirm(`「${c.name}」を削除しますか？\nこの操作は取り消せません。`)) return;
-  setSyncStatus('saving');
-  await deleteDoc(doc(db,'casts',c.id));
-  closeAdd();
-  closeDetail();
-}
-window.deleteCast=deleteCast;
-
-async function saveEdit(){
-  const name=document.getElementById('f-name').value.trim();
+window.saveEdit=async function(){
+  var name=document.getElementById('f-name').value.trim();
   if(!name){ alert('源氏名を入力してください'); return; }
   setSyncStatus('saving');
-  const c=casts[editTarget];
+  var c=casts[editTarget];
   await updateDoc(doc(db,'casts',c.id),{
-    name, age:document.getElementById('f-age').value,
+    name:name,
+    age:document.getElementById('f-age').value,
     tenure:document.getElementById('f-tenure').value,
     profileUrl:document.getElementById('f-url').value,
     strength:document.getElementById('f-strength').value,
@@ -817,92 +709,104 @@ async function saveEdit(){
     interests:document.getElementById('f-interests').value,
     memo:document.getElementById('f-memo').value
   });
-  closeAdd();
-}
-window.saveEdit=saveEdit;
+  window.closeAdd();
+};
 
-function openMonthModal(i){ monthTarget=i; document.getElementById('m-ym').value=thisMonth(); ['m-sales','m-shimei','m-shifts','m-photos','m-memo'].forEach(id=>document.getElementById(id).value=''); document.getElementById('monthModal').style.display='block'; }
-window.openMonthModal=openMonthModal;
-function closeMonthModal(){ document.getElementById('monthModal').style.display='none'; }
-window.closeMonthModal=closeMonthModal;
+window.deleteCast=async function(){
+  var c=casts[editTarget];
+  if(!confirm('「'+c.name+'」を削除しますか？\nこの操作は取り消せません。')) return;
+  setSyncStatus('saving');
+  await deleteDoc(doc(db,'casts',c.id));
+  window.closeAdd();
+  window.closeDetail();
+};
 
-async function saveMonth(){
-  const ym=document.getElementById('m-ym').value;
+// ===== 月次データ =====
+window.openMonthModal=function(i){
+  monthTarget=i;
+  document.getElementById('m-ym').value=thisMonth();
+  ['m-sales','m-shimei','m-shifts','m-photos','m-memo'].forEach(function(id){ document.getElementById(id).value=''; });
+  document.getElementById('monthModal').style.display='block';
+};
+window.closeMonthModal=function(){ document.getElementById('monthModal').style.display='none'; };
+
+window.saveMonth=async function(){
+  var ym=document.getElementById('m-ym').value;
   if(!ym){ alert('年月を入力してください'); return; }
-  const sales=parseFloat(document.getElementById('m-sales').value)||0;
-  const c=casts[monthTarget];
-  const monthly=[...(c.monthly||[])];
-  const idx=monthly.findIndex(m=>m.ym===ym);
-  const entry={ym,sales,shimei:document.getElementById('m-shimei').value,shifts:parseInt(document.getElementById('m-shifts').value)||0,photos:parseInt(document.getElementById('m-photos').value)||0,memo:document.getElementById('m-memo').value};
+  var sales=parseFloat(document.getElementById('m-sales').value)||0;
+  var c=casts[monthTarget];
+  var monthly=(c.monthly||[]).slice();
+  var idx=monthly.findIndex(function(m){ return m.ym===ym; });
+  var entry={
+    ym:ym,sales:sales,
+    shimei:document.getElementById('m-shimei').value,
+    shifts:parseInt(document.getElementById('m-shifts').value)||0,
+    photos:parseInt(document.getElementById('m-photos').value)||0,
+    memo:document.getElementById('m-memo').value
+  };
   if(idx>=0) monthly[idx]=entry; else monthly.push(entry);
   setSyncStatus('saving');
-  await updateDoc(doc(db,'casts',c.id),{monthly});
-  closeMonthModal();
-}
-window.saveMonth=saveMonth;
+  await updateDoc(doc(db,'casts',c.id),{monthly:monthly});
+  window.closeMonthModal();
+};
 
-function openMemoModal(i){ memoTarget=i; document.getElementById('memo-date').value=today(); document.getElementById('memo-content').value=''; document.getElementById('memoModal').style.display='block'; }
-window.openMemoModal=openMemoModal;
-function closeMemoModal(){ document.getElementById('memoModal').style.display='none'; }
-window.closeMemoModal=closeMemoModal;
+// ===== 面談メモ =====
+window.openMemoModal=function(i){
+  memoTarget=i;
+  document.getElementById('memo-date').value=todayStr();
+  document.getElementById('memo-content').value='';
+  document.getElementById('memoModal').style.display='block';
+};
+window.closeMemoModal=function(){ document.getElementById('memoModal').style.display='none'; };
 
-async function saveMemo(){
-  const content=document.getElementById('memo-content').value.trim();
+window.saveMemo=async function(){
+  var content=document.getElementById('memo-content').value.trim();
   if(!content){ alert('内容を入力してください'); return; }
-  const c=casts[memoTarget];
-  const newMemo={date:document.getElementById('memo-date').value,content};
+  var c=casts[memoTarget];
+  var newMemo={date:document.getElementById('memo-date').value,content:content};
   setSyncStatus('saving');
   await updateDoc(doc(db,'casts',c.id),{memos:arrayUnion(newMemo)});
-  closeMemoModal();
-}
-window.saveMemo=saveMemo;
+  window.closeMemoModal();
+};
 
-// 月次データ自動集計
-async function autoAggregateMonth(){
-  const ym=thisMonth();
-  const daysInMonth=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate();
-  // 今月の全日付を生成
-  const monthDates=[];
-  for(let d=1;d<=new Date().getDate();d++){
-    const dd=String(d).padStart(2,'0');
-    const mm=String(new Date().getMonth()+1).padStart(2,'0');
-    monthDates.push(`${new Date().getFullYear()}-${mm}-${dd}`);
-  }
-  // キャストごとに集計
-  const summary={};
-  monthDates.forEach(date=>{
-    const saved=lsGet('attend_'+date);
-    if(!saved) return;
-    const att=JSON.parse(saved);
-    Object.entries(att).forEach(([id,data])=>{
-      if(!summary[id]) summary[id]={shifts:0,photos:0};
-      if(data.working) summary[id].shifts++;
-      if(data.photo) summary[id].photos++;
-    });
-  });
-  if(!Object.keys(summary).length){ alert('今月の出勤記録がありません'); return; }
-  if(!confirm(`今月(${ym})の出勤データを月次に反映します。既存データは上書きされます。`)) return;
-  setSyncStatus('saving');
-  for(const c of casts){
-    const s=summary[c.id];
+// ===== 月次自動集計 =====
+window.autoAggregateMonth=async function(){
+  var ym=thisMonth();
+  var summary={};
+  var today=new Date();
+  for(var d=1;d<=today.getDate();d++){
+    var mm=String(today.getMonth()+1).padStart(2,'0');
+    var dd=String(d).padStart(2,'0');
+    var dateStr=today.getFullYear()+'-'+mm+'-'+dd;
+    var s=lsGet('attend_'+dateStr);
     if(!s) continue;
-    const monthly=[...(c.monthly||[])];
-    const idx=monthly.findIndex(m=>m.ym===ym);
-    const existing=idx>=0?monthly[idx]:{};
-    const entry={...existing,ym,shifts:s.shifts,photos:s.photos};
-    if(idx>=0) monthly[idx]=entry; else monthly.push(entry);
-    await updateDoc(doc(db,'casts',c.id),{monthly});
+    var att=JSON.parse(s);
+    Object.keys(att).forEach(function(id){
+      if(!summary[id]) summary[id]={shifts:0,photos:0};
+      if(att[id]&&att[id].working) summary[id].shifts++;
+      if(att[id]&&att[id].photo) summary[id].photos++;
+    });
+  }
+  if(!Object.keys(summary).length){ alert('今月の出勤記録がありません'); return; }
+  if(!confirm('今月('+ym+')の出勤データを月次に反映します。')) return;
+  setSyncStatus('saving');
+  for(var j=0;j<casts.length;j++){
+    var c=casts[j];
+    var s2=summary[c.id];
+    if(!s2) continue;
+    var monthly=(c.monthly||[]).slice();
+    var idx=monthly.findIndex(function(m){ return m.ym===ym; });
+    var existing=idx>=0?monthly[idx]:{};
+    var entry2=Object.assign({},existing,{ym:ym,shifts:s2.shifts,photos:s2.photos});
+    if(idx>=0) monthly[idx]=entry2; else monthly.push(entry2);
+    await updateDoc(doc(db,'casts',c.id),{monthly:monthly});
   }
   setSyncStatus('ok');
-  alert(`集計完了！${Object.keys(summary).length}人分のデータを反映しました。売上・指名数は月次データから手入力してください。`);
-}
-window.autoAggregateMonth=autoAggregateMonth;
-window.closeKeyModal=closeKeyModal;
-window.saveKey=saveKey;
-window.clearKey=clearKey;
+  alert('集計完了！売上・指名数は月次データから手入力してください。');
+};
 
-loadAttendance(today());
-renderKeyBanner();
+// ===== 初期化 =====
+loadAttendance(todayStr());
 </script>
 </body>
 </html>
