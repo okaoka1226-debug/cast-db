@@ -276,7 +276,7 @@ function preloadAttendance(){
     (function(d){
       var attRef=doc(db,'attendance',d);
       onSnapshot(attRef,function(snap){
-        attendanceCache[d]=snap.exists()?(snap.data().records||{}):{};
+        if(snap.exists()){ attendanceCache[d]=snap.data().records||{}; }else{ attendanceCache[d]={}; }
         renderList();
       });
     })(getDaysAgo(i));
@@ -651,7 +651,7 @@ window.sendChat=async function(i){
   var monthsText=months.length?months.map(function(m){
     return m.ym+'：売上'+m.sales+'万円 指名'+(m.shimei||'?')+'本 出勤'+(m.shifts||'?')+'回 写メUP'+(m.photos||'?')+'枚'+(m.memo?' ('+m.memo+')':'');
   }).join('\n'):'月次データなし';
-  var memosText=(c.memos||[]).length?(c.memos||[]).map(function(m){ return m.date+'：'+m.content; }).join('\n'):'なし';
+  var memosText='なし'; if((c.memos||[]).length){ memosText=(c.memos||[]).map(function(m){ return m.date+'：'+m.content; }).join('\n'); }
 
   var sys='あなたはナイトワーク店舗のマネジメントアドバイザーです。以下のキャスト情報をもとに、オーナーの質問に的確で実践的なアドバイスを日本語で返してください。簡潔に、箇条書きも活用してください。\n\n「会話ネタ」「話題」「ネタ」などのキーワードが含まれる質問の場合は、必ずweb_searchツールを使ってキャストの趣味・好きなものに関する最新情報を検索してから回答してください。\n\n【キャスト名】'+c.name+'\n【年齢】'+(c.age||'不明')+'歳\n【入店日】'+(c.tenure||'不明')+'\n【趣味・好きなもの】'+(c.interests||'なし')+'\n【強み・特徴】'+(c.strength||'なし')+'\n【課題・弱み】'+(c.weakness||'なし')+'\n【月次データ（古い順）】\n'+monthsText+'\n【面談・メモ記録】\n'+memosText;
 
