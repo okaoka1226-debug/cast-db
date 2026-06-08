@@ -637,7 +637,7 @@ function renderDetailContent(i){
       }).join('')}
     </div>
   `;
-    ?months.slice(0,6).map(m=>{
+    months.slice(0,6).map(m=>{
         const pct=Math.round((m.sales/maxS)*100);
         const photoRate=m.shifts?Math.round((m.photos||0)/m.shifts*100):null;
         return `<div class="trend-row">
