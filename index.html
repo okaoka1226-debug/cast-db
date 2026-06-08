@@ -123,7 +123,7 @@ textarea{resize:none;line-height:1.6}
       <p id="addTitle" class="sheet-title">キャスト追加</p>
       <div class="fg"><label class="fl">源氏名</label><input id="f-name" placeholder="例：さくら"/></div>
       <div class="fg"><label class="fl">年齢</label><input id="f-age" type="number" placeholder="20" min="18"/></div>
-      <div class="fg"><label class="fl">在籍期間</label><input id="f-tenure" placeholder="例：3ヶ月"/></div>
+      <div class="fg"><label class="fl">入店日</label><input id="f-tenure" type="date"/></div>
       <div class="fg"><label class="fl">強み・特徴</label><textarea id="f-strength" rows="2" placeholder="明るい、常連が多いなど"></textarea></div>
       <div class="fg"><label class="fl">課題・弱み</label><textarea id="f-weakness" rows="2" placeholder="遅刻が多め、ドリンクバック率低いなど"></textarea></div>
       <div class="fg"><label class="fl">メモ</label><textarea id="f-memo" rows="2" placeholder="直近の面談内容など"></textarea></div>
@@ -252,6 +252,7 @@ onSnapshot(query(castsRef, orderBy('createdAt', 'asc')), (snapshot) => {
     const data = { id: docSnap.id, ...docSnap.data() };
     casts.push(data);
     castsMap[docSnap.id] = data;
+    if(data.chatHistory) chatHistories['cast_'+docSnap.id] = data.chatHistory;
   });
   render();
   setSyncStatus('ok');
@@ -289,7 +290,7 @@ function renderList(){
     return `<div class="cast-card" onclick="openDetail(${i})">
       <div style="display:flex;align-items:center;gap:12px">
         <div class="avatar" style="width:44px;height:44px;font-size:15px;background:${cl.bg};color:${cl.t}">${ini(c.name)}</div>
-        <div style="flex:1"><div style="font-size:15px;font-weight:700">${c.name}</div><div style="font-size:12px;color:var(--text2);margin-top:2px">${c.age?c.age+'歳':''}${c.tenure?' · '+c.tenure:''}</div></div>
+        <div style="flex:1"><div style="font-size:15px;font-weight:700">${c.name}</div><div style="font-size:12px;color:var(--text2);margin-top:2px">${c.age?c.age+'歳':''}${c.tenure?' · 入店'+c.tenure:''}</div></div>
         <span style="color:var(--text3);font-size:18px">›</span>
       </div>
       <div class="stat2">
@@ -375,7 +376,7 @@ function renderDetailContent(i){
   document.getElementById('detailContent').innerHTML=`
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px">
       <div class="avatar" style="width:56px;height:56px;font-size:22px;background:${cl.bg};color:${cl.t}">${ini(c.name)}</div>
-      <div style="flex:1"><div style="font-size:22px;font-weight:700">${c.name}</div><div style="font-size:13px;color:var(--text2);margin-top:2px">${c.age?c.age+'歳':''}${c.tenure?' · '+c.tenure:''}</div></div>
+      <div style="flex:1"><div style="font-size:22px;font-weight:700">${c.name}</div><div style="font-size:13px;color:var(--text2);margin-top:2px">${c.age?c.age+'歳':''}${c.tenure?' · 入店'+c.tenure:''}</div></div>
       <button onclick="openEdit(${i})" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-size:12px;cursor:pointer;color:var(--text2);font-family:'Noto Sans JP',sans-serif">編集</button>
     </div>
     <div class="sec-label">売上推移</div>
@@ -424,7 +425,7 @@ async function sendChat(i){
 
 【キャスト名】${c.name}
 【年齢】${c.age||'不明'}歳
-【在籍期間】${c.tenure||'不明'}
+【入店日】${c.tenure||'不明'}
 【強み・特徴】${c.strength||'なし'}
 【課題・弱み】${c.weakness||'なし'}
 【月次売上推移（古い順）】
@@ -441,8 +442,10 @@ ${memosText}`;
     const data = await res.json();
     const reply = data.content?.[0]?.text||(data.error?.message||'エラーが発生しました');
     chatHistories[chatKey].push({role:'assistant',content:reply});
+    await updateDoc(doc(db,'casts',c.id),{chatHistory: chatHistories[chatKey]});
   }catch(e){
     chatHistories[chatKey].push({role:'assistant',content:'通信エラー。APIキーと接続を確認してください。'});
+    await updateDoc(doc(db,'casts',c.id),{chatHistory: chatHistories[chatKey]});
   }
   msgsEl.innerHTML = renderChatHist(chatHistories[chatKey]);
   msgsEl.scrollTop = msgsEl.scrollHeight;
