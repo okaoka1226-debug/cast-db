@@ -181,7 +181,7 @@ textarea{resize:none;line-height:1.6}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getFirestore, collection, doc, onSnapshot, updateDoc, addDoc, arrayUnion, deleteDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { getFirestore, collection, doc, onSnapshot, updateDoc, addDoc, arrayUnion, deleteDoc, setDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const FB = {
   apiKey:"AIzaSyAeSQpMbMASXGdNtKAkBFIAriuXEpilXzA",
@@ -249,24 +249,42 @@ function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
 function lsDel(k){ try{ localStorage.removeItem(k); }catch(e){} }
 function getKey(){ return lsGet('cast_apikey')||''; }
 
-// ===== 出勤管理 =====
+// ===== 出勤管理（Firebase同期） =====
 let todayAttendance={};
+let attendanceUnsubscribe=null;
+
 function loadAttendance(date){
-  const s=lsGet('attend_'+date);
-  todayAttendance=s?JSON.parse(s):{};
   attendanceDate=date;
+  todayAttendance={};
+  // 既存のリスナーを解除
+  if(attendanceUnsubscribe){ attendanceUnsubscribe(); attendanceUnsubscribe=null; }
+  // Firebaseからリアルタイム同期
+  var attRef=doc(db,'attendance',date);
+  attendanceUnsubscribe=onSnapshot(attRef,function(snap){
+    if(snap.exists()){
+      todayAttendance=snap.data().records||{};
+    }else{
+      todayAttendance={};
+    }
+    renderToday();
+  },function(e){ console.error(e); });
 }
-function saveAttendance(){
-  lsSet('attend_'+attendanceDate,JSON.stringify(todayAttendance));
+
+async function saveAttendance(){
+  var attRef=doc(db,'attendance',attendanceDate);
+  await setDoc(attRef,{records:todayAttendance,date:attendanceDate});
 }
+
 function getAttend(id){ return todayAttendance[id]||{working:false,photo:false}; }
 function lastAttendDate(id){
+  // localStorageから過去30日分チェック（Firebase同期前のデータも含む）
   for(var i=0;i<=30;i++){
     var d=getDaysAgo(i);
     var s=lsGet('attend_'+d);
-    if(!s) continue;
-    var att=JSON.parse(s);
-    if(att[id]&&att[id].working) return d;
+    if(s){
+      var att=JSON.parse(s);
+      if(att[id]&&att[id].working) return d;
+    }
   }
   return null;
 }
@@ -774,17 +792,29 @@ window.autoAggregateMonth=async function(){
   var ym=thisMonth();
   var summary={};
   var today=new Date();
+  // 今月の全日付をFirebaseから取得
   for(var d=1;d<=today.getDate();d++){
     var mm=String(today.getMonth()+1).padStart(2,'0');
     var dd=String(d).padStart(2,'0');
     var dateStr=today.getFullYear()+'-'+mm+'-'+dd;
+    // localStorageとFirebase両方チェック
     var s=lsGet('attend_'+dateStr);
-    if(!s) continue;
-    var att=JSON.parse(s);
-    Object.keys(att).forEach(function(id){
+    if(s){
+      var att=JSON.parse(s);
+      Object.keys(att).forEach(function(id){
+        if(!summary[id]) summary[id]={shifts:0,photos:0};
+        if(att[id]&&att[id].working) summary[id].shifts++;
+        if(att[id]&&att[id].photo) summary[id].photos++;
+      });
+    }
+  }
+  // todayAttendanceも含める
+  if(attendanceDate.slice(0,7)===ym){
+    Object.keys(todayAttendance).forEach(function(id){
       if(!summary[id]) summary[id]={shifts:0,photos:0};
-      if(att[id]&&att[id].working) summary[id].shifts++;
-      if(att[id]&&att[id].photo) summary[id].photos++;
+      var att=todayAttendance[id];
+      if(att&&att.working) summary[id].shifts++;
+      if(att&&att.photo) summary[id].photos++;
     });
   }
   if(!Object.keys(summary).length){ alert('今月の出勤記録がありません'); return; }
