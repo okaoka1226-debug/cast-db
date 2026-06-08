@@ -300,7 +300,33 @@ function lastAttendDate(id){
   }
   return null;
 }
-function attendLabel(id){
+function lastPhotoDate(id){
+  for(var i=0;i<=30;i++){
+    var d=getDaysAgo(i);
+    var cache=attendanceCache[d];
+    if(cache&&cache[id]&&cache[id].photo) return d;
+    var s=lsGet('attend_'+d);
+    if(s){ var att=JSON.parse(s); if(att[id]&&att[id].photo) return d; }
+  }
+  return null;
+}
+function photoLabel(id){
+  var date=lastPhotoDate(id);
+  if(!date) return null;
+  var days=daysSince(date);
+  if(days===0) return '今日UP';
+  if(days<=6) return days+'日前UP';
+  return '7日以上前UP';
+}
+function photoColor(id){
+  var date=lastPhotoDate(id);
+  if(!date) return 'var(--text3)';
+  var days=daysSince(date);
+  if(days===0) return 'var(--success)';
+  if(days<=3) return 'var(--accent)';
+  if(days<=6) return 'var(--warn)';
+  return 'var(--text3)';
+}
   var date=lastAttendDate(id);
   if(!date) return null;
   var days=daysSince(date);
@@ -395,6 +421,8 @@ window.renderList=function(){
     var isWarn=c.days>=4&&c.days<7;
     var aLabel=attendLabel(c.id);
     var aColor=attendColor(c.id);
+    var pLabel=photoLabel(c.id);
+    var pColor=photoColor(c.id);
     var diffColor=diff===null?'var(--text)':diff>=0?'var(--success)':'var(--danger)';
     var diffText=diff===null?'―':(diff>=0?'+':'')+fmt(Math.abs(diff))+'万';
     return '<div class="card'+(isAlert?' alert-border':'')+'" onclick="openDetail('+c._i+')">'
@@ -404,6 +432,7 @@ window.renderList=function(){
       +'<div style="font-size:15px;font-weight:700">'+c.name+(isAlert?'<span class="badge badge-danger">7日以上情報更新なし</span>':isWarn?'<span class="badge badge-warn">'+c.days+'日未更新</span>':'')+'</div>'
       +'<div style="font-size:12px;color:var(--text2);margin-top:2px">'+(c.age?c.age+'歳':'')+(c.tenure?' · 入店'+c.tenure:'')+'</div>'
       +(aLabel?'<div style="font-size:11px;color:'+aColor+';margin-top:3px">🏃 '+aLabel+'</div>':'')
+      +(pLabel?'<div style="font-size:11px;color:'+pColor+';margin-top:2px">📸 '+pLabel+'</div>':'')
       +'</div>'
       +'<span style="color:var(--text3);font-size:18px">›</span>'
       +'</div>'
@@ -447,15 +476,10 @@ function renderToday(){
       +'<div style="display:flex;align-items:center;gap:10px">'
       +'<div class="avatar" style="width:38px;height:38px;font-size:14px;background:'+cl.bg+';color:'+cl.t+'">'+ini(c.name)+'</div>'
       +'<div style="flex:1"><div style="font-size:14px;font-weight:700">'+c.name+'</div></div>'
+      +'<button class="tap-btn '+(att.photo?'tap-photo-on':'tap-off')+'" onclick="togglePhoto(\''+c.id+'\')" style="margin-right:6px">'+(att.photo?'📸 UP済み':'📸 UPなし')+'</button>'
       +'<button class="tap-btn '+(att.working?'tap-on':'tap-off')+'" onclick="toggleAttend(\''+c.id+'\')">'+(att.working?'✓ 出勤':'出勤')+'</button>'
+      +'</div>'
       +'</div>';
-    if(att.working){
-      html+='<div style="display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">'
-        +'<span style="font-size:12px;color:var(--text2);flex:1">写メUP</span>'
-        +'<button class="tap-btn '+(att.photo?'tap-photo-on':'tap-off')+'" onclick="togglePhoto(\''+c.id+'\')">'+(att.photo?'📸 UP済み':'UPなし')+'</button>'
-        +'</div>';
-    }
-    html+='</div>';
   });
   if(workingCasts.length){
     var photoCount=workingCasts.filter(function(c){ return getAttend(c.id).photo; }).length;
