@@ -263,7 +263,7 @@ function lastAttendDate(id){
     const saved=lsGet('attend_'+dateStr);
     if(!saved) continue;
     const att=JSON.parse(saved);
-    if(att[id]?.working) return dateStr;
+    if(att[id]&&att[id].working) return dateStr;
   }
   return null;
 }
@@ -315,7 +315,7 @@ function getAttendanceHistory(castId, days=14){
     const saved=lsGet('attend_'+d);
     if(saved){
       const att=JSON.parse(saved);
-      if(att[castId]?.working) result.push(d);
+      if(att[castId]&&att[castId].working) result.push(d);
     }
   }
   return result; // 新しい順
@@ -328,7 +328,7 @@ function getRecentAttendanceStatus(castId){
   for(let i=0;i<=6;i++){
     const d=getDaysAgo(i);
     const saved=lsGet('attend_'+d);
-    const working=saved?JSON.parse(saved)[castId]?.working||false:false;
+    const working=saved?JSON.parse(saved)[castId]?JSON.parse(saved)[castId].working:false:false;
     days.push({date:d,working});
   }
   // 最終出勤日
@@ -339,7 +339,7 @@ function getRecentAttendanceStatus(castId){
     if(d.working) streak++;
     else break;
   }
-  return {days, lastWorked:lastWorked?.date||null, streak};
+  return {days, lastWorked:(lastWorked&&lastWorked.date)||null, streak};
 }
 function getYesterday(){
   const d=new Date(); d.setDate(d.getDate()-1);
@@ -440,7 +440,7 @@ window.saveKeyFromSettings=saveKeyFromSettings;
 
 function renderList(){
   const el=document.getElementById('list');
-  const q=(document.getElementById('searchInput')?.value||'').trim().toLowerCase();
+  const q=((document.getElementById('searchInput')||{}).value||'').trim().toLowerCase();
   if(!casts.length){
     el.innerHTML='<div class="empty"><div style="font-size:40px;margin-bottom:12px">👥</div><p style="font-size:14px;line-height:1.8">キャストがまだいません<br>右上の「追加」から登録してください</p></div>';
     return;
@@ -478,7 +478,7 @@ function renderToday(){
   const el=document.getElementById('today');
   if(!casts.length){ el.innerHTML='<div class="empty">キャストを登録してください</div>'; return; }
 
-  const workingCasts=casts.filter(c=>todayAttendance[c.id]?.working);
+  const workingCasts=casts.filter(c=>todayAttendance[c.id]&&todayAttendance[c.id].working);
   const alertCasts=casts.filter(c=>daysSince(lastMemoDate(c))>=7);
 
   let html='';
@@ -521,7 +521,7 @@ function renderToday(){
   }).join('');
 
   if(workingCasts.length){
-    const photoRate=workingCasts.filter(c=>todayAttendance[c.id]?.photo).length;
+    const photoRate=workingCasts.filter(c=>todayAttendance[c.id]&&todayAttendance[c.id].photo).length;
     html+=`<div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-top:14px">
       <div style="font-size:12px;color:var(--text3);margin-bottom:8px">${attendanceDate} サマリー</div>
       <div class="stat2">
@@ -546,11 +546,11 @@ function renderRanking(){
   const data=casts.map((c,i)=>{
     const m=(c.monthly||[]).slice().sort((a,b)=>b.ym.localeCompare(a.ym));
     return{...c,_i:i,latest:m[0]||null,prev:m[1]||null};
-  }).sort((a,b)=>((b.latest?.sales)||0)-((a.latest?.sales)||0));
-  const max=data[0]?.latest?.sales||1;
+  }).sort((a,b)=>((b.(latest&&latest.sales))||0)-((a.(latest&&latest.sales))||0));
+  const max=data[0]?(data[0].latest&&data[0].latest.sales)||1:1;
   const medals=['🥇','🥈','🥉'];
   el.innerHTML=data.map((c,rank)=>{
-    const cl=col(c._i); const pct=Math.round(((c.latest?.sales||0)/max)*100);
+    const cl=col(c._i); const pct=Math.round(((c.(latest&&latest.sales)||0)/max)*100);
     const diff=c.latest&&c.prev?+(c.latest.sales-c.prev.sales).toFixed(1):null;
     const photoRate=c.latest&&c.latest.shifts?Math.round((c.latest.photos||0)/c.latest.shifts*100):null;
     return `<div class="cast-card" onclick="openDetail(${c._i})">
@@ -620,7 +620,7 @@ function renderDetailContent(i){
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
       <div style="flex:1">
         <div style="font-size:12px;color:var(--text3);margin-bottom:4px">直近の出勤</div>
-        <div style="font-size:15px;font-weight:700;color:${attStatus.lastWorked&&daysSince(attStatus.lastWorked)<=1?'var(--success)':'var(--text)'}">${lastWorkedLabel()}</div>
+        <div style="font-size:15px;font-weight:700;color:${attStatus&&attStatus.lastWorked&&daysSince(attStatus.lastWorked)<=1?'var(--success)':'var(--text)'}">${lastWorkedLabel()}</div>
       </div>
       <div style="text-align:right">
         <div style="font-size:12px;color:var(--text3);margin-bottom:4px">連勤</div>
@@ -731,7 +731,7 @@ ${memosText}`;
     });
     const data=await res.json();
     const blocks=data.content||[];
-    const reply=blocks.filter(b=>b.type==='text').map(b=>b.text).join('\n')||(data.error?.message||'エラーが発生しました');
+    const reply=blocks.filter(b=>b.type==='text').map(b=>b.text).join('\n')||(data.(error&&error.message)||'エラーが発生しました');
     chatHistories[chatKey].push({role:'assistant',content:reply});
     try{ await updateDoc(doc(db,'casts',c.id),{chatHistory:chatHistories[chatKey]}); }catch(e){ console.error('履歴保存失敗',e); }
   }catch(e){
