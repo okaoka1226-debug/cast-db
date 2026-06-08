@@ -622,7 +622,16 @@ function renderDetailContent(i){
         +'</div></div>'
       :'<div style="font-size:13px;color:var(--text3);padding:8px 0">APIキーが未設定です。⚙️タブから設定してください。</div>')
     +'<div class="sec-label">面談・メモ記録</div>'
-    +(memos.length?memos.map(function(m){ return '<div class="hist-item"><div class="hist-date">'+m.date+'</div><div class="hist-content">'+m.content+'</div></div>'; }).join(''):'<div style="font-size:13px;color:var(--text3)">記録なし</div>')
+    +(memos.length?memos.map(function(m,mi){
+        var realIdx=c.memos.length-1-mi;
+        return '<div class="hist-item">'
+          +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">'
+          +'<div class="hist-date">'+m.date+'</div>'
+          +'<button onclick="deleteMemo('+i+','+realIdx+')" style="background:none;border:none;color:var(--text3);font-size:11px;cursor:pointer;padding:2px 6px;border-radius:4px;font-family:\'Noto Sans JP\',sans-serif">削除</button>'
+          +'</div>'
+          +'<div class="hist-content">'+m.content+'</div>'
+          +'</div>';
+      }).join(''):'<div style="font-size:13px;color:var(--text3)">記録なし</div>')
     +'<button class="add-mini-btn" onclick="openMemoModal('+i+')">＋ メモを追加</button>';
 
   var cm=document.getElementById('chatMsgs_'+i);
@@ -797,6 +806,15 @@ window.saveMemo=async function(){
   setSyncStatus('saving');
   await updateDoc(doc(db,'casts',c.id),{memos:arrayUnion(newMemo)});
   window.closeMemoModal();
+};
+
+window.deleteMemo=async function(castIdx,memoIdx){
+  if(!confirm('このメモを削除しますか？')) return;
+  var c=casts[castIdx];
+  var memos=(c.memos||[]).slice();
+  memos.splice(memoIdx,1);
+  setSyncStatus('saving');
+  await updateDoc(doc(db,'casts',c.id),{memos:memos});
 };
 
 // ===== 月次自動集計 =====
