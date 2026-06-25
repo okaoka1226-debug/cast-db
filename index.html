@@ -153,6 +153,21 @@ textarea{resize:none;line-height:1.6}
   </div>
 </div>
 
+<!-- TODO入力 -->
+<div id="todoModal" style="display:none">
+  <div class="overlay" onclick="if(event.target===this)closeTodoModal()">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <p class="sheet-title">TODOを追加</p>
+      <div class="fg"><label class="fl">内容</label><input id="todo-text" placeholder="例：面談する、写メ督促など"/></div>
+      <div class="brow">
+        <button class="btn btn-c" onclick="closeTodoModal()">キャンセル</button>
+        <button class="btn btn-p" onclick="saveTodo()">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- 面談メモ -->
 <div id="memoModal" style="display:none">
   <div class="overlay" onclick="if(event.target===this)closeMemoModal()">
@@ -424,6 +439,20 @@ window.renderList=function(){
     var aColor=attendColor(c.id);
     var pLabel=photoLabel(c.id);
     var pColor=photoColor(c.id);
+    var todos=(c.todos||[]).filter(function(t){ return !t.done; });
+    var todoHTML='';
+    if(todos.length){
+      todoHTML=todos.slice(0,2).map(function(t,ti){
+        var realIdx=(c.todos||[]).indexOf(t);
+        return '<div style="display:flex;align-items:center;gap:6px;margin-top:4px">'
+          +'<span style="font-size:11px;color:var(--warn)">📌</span>'
+          +'<span style="font-size:12px;color:var(--text2);flex:1">'+t.text+'</span>'
+          +'<button onclick="event.stopPropagation();doneTodo(\''+c.id+'\','+realIdx+')" style="background:none;border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:10px;cursor:pointer;color:var(--text3);font-family:\'Noto Sans JP\',sans-serif">完了</button>'
+          +'</div>';
+      }).join('');
+      if(todos.length>2) todoHTML+='<div style="font-size:11px;color:var(--text3);margin-top:2px">他'+(todos.length-2)+'件</div>';
+    }
+    todoHTML+='<button onclick="event.stopPropagation();openTodoInput(\''+c.id+'\')" style="background:none;border:1px dashed var(--border);border-radius:4px;padding:3px 8px;font-size:11px;cursor:pointer;color:var(--text3);margin-top:6px;font-family:\'Noto Sans JP\',sans-serif;display:block">＋ TODO追加</button>';
     var diffColor=diff===null?'var(--text)':diff>=0?'var(--success)':'var(--danger)';
     var diffText=diff===null?'―':(diff>=0?'+':'')+fmt(Math.abs(diff))+'万';
     return '<div class="card'+(isAlert?' alert-border':'')+'" onclick="openDetail('+c._i+')">'
@@ -432,8 +461,7 @@ window.renderList=function(){
       +'<div style="flex:1">'
       +'<div style="font-size:15px;font-weight:700">'+c.name+(isAlert?'<span class="badge badge-danger">7日以上情報更新なし</span>':isWarn?'<span class="badge badge-warn">'+c.days+'日未更新</span>':'')+'</div>'
       +'<div style="font-size:12px;color:var(--text2);margin-top:2px">'+(c.age?c.age+'歳':'')+(c.tenure?' · 入店'+c.tenure:'')+'</div>'
-      +(aLabel?'<div style="font-size:11px;color:'+aColor+';margin-top:3px">🏃 '+aLabel+'</div>':'')
-      +(pLabel?'<div style="font-size:11px;color:'+pColor+';margin-top:2px">📸 '+pLabel+'</div>':'')
+      +(todoHTML)
       +'</div>'
       +'<span style="color:var(--text3);font-size:18px">›</span>'
       +'</div>'
@@ -840,6 +868,36 @@ window.deleteMemo=async function(castIdx,memoIdx){
   memos.splice(memoIdx,1);
   setSyncStatus('saving');
   await updateDoc(doc(db,'casts',c.id),{memos:memos});
+};
+
+// ===== TODO =====
+let todoTargetId=null;
+window.openTodoInput=function(castId){
+  todoTargetId=castId;
+  document.getElementById('todo-text').value='';
+  document.getElementById('todoModal').style.display='block';
+  setTimeout(function(){ document.getElementById('todo-text').focus(); },100);
+};
+window.closeTodoModal=function(){ document.getElementById('todoModal').style.display='none'; };
+window.saveTodo=async function(){
+  var text=document.getElementById('todo-text').value.trim();
+  if(!text){ alert('内容を入力してください'); return; }
+  var c=castsMap[todoTargetId];
+  if(!c) return;
+  var todos=(c.todos||[]).slice();
+  todos.push({text:text,done:false,createdAt:new Date().toISOString()});
+  setSyncStatus('saving');
+  await updateDoc(doc(db,'casts',todoTargetId),{todos:todos});
+  window.closeTodoModal();
+};
+window.doneTodo=async function(castId,idx){
+  var c=castsMap[castId];
+  if(!c) return;
+  var todos=(c.todos||[]).slice();
+  if(!todos[idx]) return;
+  todos[idx]=Object.assign({},todos[idx],{done:true});
+  setSyncStatus('saving');
+  await updateDoc(doc(db,'casts',castId),{todos:todos});
 };
 
 // ===== 月次自動集計 =====
