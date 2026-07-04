@@ -99,12 +99,14 @@ textarea{resize:none;line-height:1.6}
     <button class="tab" onclick="switchTab('today',this)">出勤</button>
     
     <button class="tab" onclick="switchTab('consult',this)">相談</button>
+    <button class="tab" onclick="switchTab('ai',this)">AI</button>
     <button class="tab" onclick="switchTab('settings',this)">⚙️</button>
   </div>
   <div id="list" class="sec active"></div>
   <div id="today" class="sec"></div>
   
   <div id="consult" class="sec"></div>
+  <div id="ai" class="sec"></div>
   <div id="settings" class="sec"></div>
 </div>
 
@@ -392,7 +394,7 @@ window.switchTab=function(tab,el){
   render();
 };
 
-function render(){ renderList(); renderToday(); renderConsult(); renderSettings(); }
+function render(){ renderList(); renderToday(); renderConsult(); renderAI(); renderSettings(); }
 
 // ===== 一覧 =====
 window.renderList=function(){
@@ -561,6 +563,49 @@ function renderRanking(){
 }
 
 // ===== 相談タブ =====
+
+function renderAI(){
+  var el=document.getElementById('ai');
+  if(!el) return;
+  var all=[];
+  casts.forEach(function(c,i){
+    var hist=chatHistories['cast_'+c.id]||c.chatHistory||[];
+    if(!hist.length) return;
+    // 最新のassistantメッセージを取得
+    var lastAI=null;
+    for(var j=hist.length-1;j>=0;j--){
+      if(hist[j].role==='assistant'){ lastAI=hist[j]; break; }
+    }
+    if(!lastAI) return;
+    var lastUser=null;
+    for(var k=hist.length-1;k>=0;k--){
+      if(hist[k].role==='user'){ lastUser=hist[k]; break; }
+    }
+    all.push({castIdx:i,castId:c.id,castName:c.name,lastAI:lastAI,lastUser:lastUser});
+  });
+  // チャット履歴の順番（登録順）で最新10件
+  all=all.slice(-10).reverse();
+  if(!all.length){
+    el.innerHTML='<div class="empty"><div style="font-size:40px;margin-bottom:12px">🤖</div><p style="font-size:14px">AIチャットの履歴がまだありません</p></div>';
+    return;
+  }
+  el.innerHTML=all.map(function(item){
+    var cl=col(item.castIdx);
+    var aiText=item.lastAI.content.replace(/<br>/g,' ').replace(/\n/g,' ');
+    var truncAI=aiText.length>30?aiText.slice(0,30)+'…':aiText;
+    var userText=item.lastUser?item.lastUser.content:'';
+    var truncUser=userText.length>20?userText.slice(0,20)+'…':userText;
+    return '<div class="card" onclick="openDetail('+item.castIdx+')">'
+      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'
+      +'<div class="avatar" style="width:34px;height:34px;font-size:13px;background:'+cl.bg+';color:'+cl.t+'">'+ini(item.castName)+'</div>'
+      +'<span style="font-size:14px;font-weight:700">'+item.castName+'</span>'
+      +'</div>'
+      +(truncUser?'<div style="font-size:11px;color:var(--text3);margin-bottom:4px">Q: '+truncUser+'</div>':'')
+      +'<div style="font-size:13px;color:var(--text2);line-height:1.6">🤖 '+truncAI+'</div>'
+      +'</div>';
+  }).join('');
+}
+
 function renderConsult(){
   var el=document.getElementById('consult');
   var all=[];
