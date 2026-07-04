@@ -497,10 +497,19 @@ function renderToday(){
   casts.forEach(function(c,i){
     var cl=col(i);
     var att=getAttend(c.id);
+    var lastDate=lastAttendDate(c.id);
+    var lastAttendText='最終出勤：記録なし';
+    if(lastDate){
+      var d=daysSince(lastDate);
+      if(d===0) lastAttendText='最終出勤：今日';
+      else if(d<=6) lastAttendText='最終出勤：'+d+'日前';
+      else lastAttendText='最終出勤：7日以上前';
+    }
     html+='<div class="card'+(att.working?' working-border':'')+'">'
       +'<div style="display:flex;align-items:center;gap:10px">'
       +'<div class="avatar" style="width:38px;height:38px;font-size:14px;background:'+cl.bg+';color:'+cl.t+'">'+ini(c.name)+'</div>'
-      +'<div style="flex:1"><div style="font-size:14px;font-weight:700">'+c.name+'</div></div>'
+      +'<div style="flex:1"><div style="font-size:14px;font-weight:700">'+c.name+'</div>'
+      +'<div style="font-size:11px;color:var(--text3);margin-top:2px">'+lastAttendText+'</div></div>'
       +'<button class="tap-btn '+(att.photo?'tap-photo-on':'tap-off')+'" onclick="togglePhoto(\''+c.id+'\')" style="margin-right:6px">'+(att.photo?'📸 UP済み':'📸 UPなし')+'</button>'
       +'<button class="tap-btn '+(att.working?'tap-on':'tap-off')+'" onclick="toggleAttend(\''+c.id+'\')">'+(att.working?'✓ 出勤':'出勤')+'</button>'
       +'</div>'
