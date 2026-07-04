@@ -675,15 +675,18 @@ function renderDetailContent(i){
         +'</div></div>'
       :'<div style="font-size:13px;color:var(--text3);padding:8px 0">APIキーが未設定です。⚙️タブから設定してください。</div>')
     +'<div class="sec-label">TODO</div>'
-    +(c.todos&&(c.todos||[]).filter(function(t){ return !t.done; }).length
-      ?(c.todos||[]).filter(function(t){ return !t.done; }).map(function(t,ti){
-          var realIdx=(c.todos||[]).indexOf(t);
+    +function(){
+        var allTodos=c.todos||[];
+        var undone=allTodos.filter(function(t){ return !t.done; });
+        if(!undone.length) return '<div style="font-size:13px;color:var(--text3)">TODOなし</div>';
+        return undone.map(function(t){
+          var realIdx=allTodos.indexOf(t);
           return '<div class="hist-item" style="display:flex;align-items:center;gap:8px">'
             +'<span style="font-size:13px;flex:1">📌 '+t.text+'</span>'
             +'<button onclick="doneTodo(\''+c.id+'\','+realIdx+')" style="background:none;border:1px solid var(--border);border-radius:4px;padding:4px 10px;font-size:12px;cursor:pointer;color:var(--text3);font-family:\'Noto Sans JP\',sans-serif;white-space:nowrap">完了</button>'
             +'</div>';
-        }).join('')
-      :'<div style="font-size:13px;color:var(--text3)">TODOなし</div>')
+        }).join('');
+      }()
     +'<button class="add-mini-btn" onclick="openTodoInput(\''+c.id+'\')" style="margin-top:8px">＋ TODO追加</button>'
     +'<div class="sec-label">面談・メモ記録</div>'
     +(memos.length?memos.map(function(m,mi){
