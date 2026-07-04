@@ -442,7 +442,7 @@ window.renderList=function(){
     var todos=(c.todos||[]).filter(function(t){ return !t.done; });
     var todoHTML='';
     if(todos.length){
-      todoHTML=todos.slice(0,2).map(function(t,ti){
+      todoHTML=todos.slice(0,4).map(function(t,ti){
         var realIdx=(c.todos||[]).indexOf(t);
         return '<div style="display:flex;align-items:center;gap:6px;margin-top:4px">'
           +'<span style="font-size:11px;color:var(--warn)">📌</span>'
@@ -450,7 +450,7 @@ window.renderList=function(){
           +'<button onclick="event.stopPropagation();doneTodo(\''+c.id+'\','+realIdx+')" style="background:none;border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:10px;cursor:pointer;color:var(--text3);font-family:\'Noto Sans JP\',sans-serif">完了</button>'
           +'</div>';
       }).join('');
-      if(todos.length>2) todoHTML+='<div style="font-size:11px;color:var(--text3);margin-top:2px">他'+(todos.length-2)+'件</div>';
+      if(todos.length>4) todoHTML+='<div style="font-size:11px;color:var(--text3);margin-top:2px">他'+(todos.length-4)+'件</div>';
     }
     todoHTML+='<button onclick="event.stopPropagation();openTodoInput(\''+c.id+'\')" style="background:none;border:1px dashed var(--border);border-radius:4px;padding:3px 8px;font-size:11px;cursor:pointer;color:var(--text3);margin-top:6px;font-family:\'Noto Sans JP\',sans-serif;display:block">＋ TODO追加</button>';
     var diffColor=diff===null?'var(--text)':diff>=0?'var(--success)':'var(--danger)';
