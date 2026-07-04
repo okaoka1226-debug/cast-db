@@ -133,24 +133,7 @@ textarea{resize:none;line-height:1.6}
   </div>
 </div>
 
-<!-- 月次データ -->
-<div id="monthModal" style="display:none">
-  <div class="overlay" onclick="if(event.target===this)closeMonthModal()">
-    <div class="sheet">
-      <div class="sheet-handle"></div>
-      <p class="sheet-title">月次データを追加</p>
-      <div class="fg"><label class="fl">年月</label><input id="m-ym" type="month"/></div>
-      <div class="fg"><label class="fl">売上（万円）</label><input id="m-sales" type="number" placeholder="0" step="0.1"/></div>
-      <div class="fg"><label class="fl">指名数</label><input id="m-shimei" type="number" placeholder="0"/></div>
-      <div class="fg"><label class="fl">出勤数</label><input id="m-shifts" type="number" placeholder="0"/></div>
-      <div class="fg"><label class="fl">写メUP数</label><input id="m-photos" type="number" placeholder="0"/></div>
-      <div class="fg"><label class="fl">メモ</label><textarea id="m-memo" rows="2" placeholder="今月の特記事項など"></textarea></div>
-      <div class="brow">
-        <button class="btn btn-c" onclick="closeMonthModal()">キャンセル</button>
-        <button class="btn btn-p" onclick="saveMonth()">保存</button>
-      </div>
-    </div>
-  </div>
+
 </div>
 
 <!-- TODO入力 -->
@@ -663,9 +646,9 @@ function renderDetailContent(i){
     +(c.profileUrl?'<a href="'+c.profileUrl+'" target="_blank" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 10px;font-size:11px;color:var(--accent);text-decoration:none;text-align:center">HP</a>':'')
     +'<button onclick="openEdit('+i+')" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 10px;font-size:11px;cursor:pointer;color:var(--text2);font-family:\'Noto Sans JP\',sans-serif">編集</button>'
     +'</div></div>'
-    +'<div class="sec-label">売上・写メ推移</div>'
+    +''
     +'<div class="card" style="cursor:default">'+trendHTML+'</div>'
-    +'<button class="add-mini-btn" onclick="openMonthModal('+i+')">＋ 月次データを追加</button>'
+    +''
     +(c.interests?'<div class="sec-label">趣味・好きなもの</div><div class="info-box">'+c.interests+'</div>':'')
     +(c.strength?'<div class="sec-label">強み・特徴</div><div class="info-box">'+c.strength+'</div>':'')
     +(c.weakness?'<div class="sec-label">課題・弱み</div><div class="info-box">'+c.weakness+'</div>':'')
